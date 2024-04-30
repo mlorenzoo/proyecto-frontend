@@ -1,74 +1,105 @@
-import { useState } from 'react';
-import { Formik, Form, Field, ErrorMessage } from 'formik';
-import { Button } from 'react-bootstrap';
-import { useNavigate } from 'react-router-dom';
-import useUserContext from '../../hooks/useUserContext';
-import Layout from '../../components/Layout';
-import { useContext } from 'react';
-import { ServicesContext } from '../../contexts/ServicesContext'; // Corregit el nom del fitxer d'importació
+import { Form, Button } from 'react-bootstrap'
+import { useNavigate } from 'react-router-dom'
+import Layout from '../../components/Layout'
 import Logger from '../../library/Logger'
-import * as yup from 'yup';
+import useUserContext from '../../hooks/useUserContext'
+import useServicesContext from '../../hooks/useServicesContext'
 
+import { Formik } from 'formik'
+import * as Yup from 'yup'
 
 export default function Login() {
-	
-	const {Formik} = formik;
 
-	const [ data, setData ] = useState("")
 	const navigate = useNavigate()
-	const { setUser } = useUserContext()
+	const { setAuthToken, setUser } = useUserContext()
+	const { authService, lSessionService, sSessionService } = useServicesContext()
 
-	const schema = yup.object().shape({
-		email: yup.string().required('Email requerido').email('Email debe ser uba dirección de correo electrónico'),
-		password: yup.string().required('Contraseña requerida').min(6,'La contraseña debe tener mínimo 6 caracteres'),
-		rememberme: yup.bool().oneOf([true], 'Remember Me'),
-	});
-	
-	function onSubmit (e) {
+	async function onSubmit(data) {
 		Logger.debug("Login form submitted")
 		Logger.debug(data)
-		setUser(data)
-		navigate("/")
-		e.preventDefault()
+		// Auth 
+		try {
+			const authToken = await authService.doLogin(data.email, data.password)
+			console.log(authToken)
+			if (authToken) {
+				const user = { "email": data.email, "remember": data.remember }
+				// Session			
+				const sessionService = user.remember ? lSessionService : sSessionService
+				sessionService.createSession({ authToken, user })
+				// State
+				setAuthToken(authToken)
+				setUser(user)
+				// Redirect
+				navigate("/")
+				alert("Inici de sessió OK!")
+			} else {
+				alert("Credencials incorrectes!")
+			}
+		} catch (error) {
+			Logger.error(error.message)
+			alert("ERROR durant l'inici de sessió... :-(")
+		}
 	}
 
-	function onInput (e) {
-		const formData = {}
-		formData[e.currentTarget.name] = e.currentTarget.value
-		setData({
-			...data,
-			...formData
-		})
-	}
+	const schema = Yup.object().shape({
+		email: Yup.string().email('Introdueix una adreça de correu vàlida').required('Aquest camp és obligatori'),
+		password: Yup.string().min(6, 'La contrasenya ha de tenir com a mínim 6 caràcters').required('Aquest camp és obligatori'),
+		remember: Yup.boolean(),
+	});
 
 	return (
 		<Layout>
 			<section id="login" className="w-75 m-auto">
-				<h2>Sign in</h2>
+				<h2>Inici de sessió</h2>
 				<Formik
-				    initialValues={{ email: '', password: '', rememberme: false}}
 					validationSchema={schema}
 					onSubmit={onSubmit}
+					initialValues={{
+						email: '',
+						password: '',
+						remember: false
+					}}
 				>
-					{({ isSubmitting }) => (
-						<Form>
+					{({ handleSubmit, handleChange, values, touched, errors }) => (
+						<Form noValidate onSubmit={handleSubmit}>
 							<Form.Group className="mb-3" controlId="formEmail">
-								<Form.Label>Email address</Form.Label>
-								<Form.Control type="email" name="email" placeholder="Enter email" onInput={onInput} />
+								<Form.Label>Adreça electrònica</Form.Label>
+								<Form.Control
+									type="email"
+									name="email"
+									placeholder="Introdueix adreça de correu"
+									value={values.email}
+									onChange={handleChange}
+									isInvalid={!!errors.email}
+								/>
+								<Form.Control.Feedback type="invalid">
+									{errors.email}
+								</Form.Control.Feedback>
 							</Form.Group>
 							<Form.Group className="mb-3" controlId="formPassword">
-								<Form.Label>Password</Form.Label>
-								<Form.Control type="password" name="password" placeholder="Enter password" onInput={onInput} />
+								<Form.Label>Contrasenya</Form.Label>
+								<Form.Control
+									type="password"
+									name="password"
+									placeholder="Introdueix password"
+									value={values.password}
+									onChange={handleChange}
+									isInvalid={!!errors.password}
+								/>
+								<Form.Control.Feedback type="invalid">
+									{errors.password}
+								</Form.Control.Feedback>
 							</Form.Group>
-							<Form.Group className="mb-3" controlId="RememberMe">
+							<Form.Group className="mb-3" controlId="formCheckbox">
 								<Form.Check
+									type="checkbox"
 									name="remember"
-									label="Remember Me"
+									label="Recordar sessió"
 									onChange={handleChange}
 								/>
 							</Form.Group>
-							<Button variant="primary" type="submit" disabled={isSubmitting}>
-								Submit
+							<Button variant="primary" type="submit">
+								Desar
 							</Button>
 						</Form>
 					)}

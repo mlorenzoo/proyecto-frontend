@@ -1,0 +1,78 @@
+[
+  {
+    "latitude": 41.1795456,
+    "longitude": 1.5695872,
+    "name": "Institut Joaquim Mir",
+    "description": "El meu institut",
+    "upload": "https://agora.xtec.cat/iesjoaquimmir/wp-content/uploads/usu530/2014/09/Selecci%C3%B3_005.png",
+    "visibility": "1",
+    "id": "910e4832-7888-4a91-8b89-49b70ef0317d",
+    "author": { "email": "armand1@gmail.com", "name": "Armand 1" }
+  },
+
+  {
+    "latitude": 41.1795456,
+    "longitude": 1.5695872,
+    "name": "Institut Baix a Mar",
+    "description": "On l'escola oficial d'idiomes",
+    "upload": "https://agora-eoi.xtec.cat/eoigarraf/wp-content/uploads/usu2250/2023/02/robert-katzki-jbtfM0XBeRc-unsplash-1024x683.jpg",
+    "visibility": "1",
+    "id": "531309d8-81e2-422b-97a8-bb3c14020761",
+    "author": { "email": "armand1@gmail.com", "name": "Armand 1" }
+  },
+
+  {
+    "latitude": 41.1795456,
+    "longitude": 1.5695872,
+    "name": "Institut Camí de Mar",
+    "description": "A Calafell, em pilla lluny",
+    "upload": "https://www.inscamidemar.cat/wp-content/uploads/2015/06/centre.jpg",
+    "visibility": "1",
+    "id": "6bd72f85-57f2-46f3-b9b7-31b22020854f",
+    "author": { "email": "armand1@gmail.com", "name": "Armand 1" }
+  },
+
+  {
+    "latitude": 41.1795456,
+    "longitude": 1.5695872,
+    "name": "Institut Dolors i Mallafré",
+    "description": "On potser hi acabarem tots",
+    "upload": "https://agora.xtec.cat/iesmallafre/wp-content/uploads/usu105/2023/07/IMG_20230704_102821-1024x646.jpg",
+    "visibility": "1",
+    "id": "0e261894-b0bf-45dc-9239-335cb007aca0",
+    "author": { "email": "armand1@gmail.com", "name": "Armand 1" }
+  },
+
+  {
+    "latitude": 41.1795456,
+    "longitude": 1.5695872,
+    "name": "Institut Andreu Nin",
+    "description": "Com potser hi acabarem tots",
+    "upload": "https://andreunin.junior-report.media/wp-content/uploads/2023/06/institut-andrreu-nin-1.jpg",
+    "visibility": "1",
+    "id": "7eb32be4-fa4a-48ba-a711-c7acd64bd5f9",
+    "author": { "email": "armand1@gmail.com", "name": "Armand 1" }
+  },
+
+  {
+    "latitude": 41.1795456,
+    "longitude": 1.5695872,
+    "name": "CEIP Santa Creu",
+    "description": "Alguns hi anaven de petits",
+    "upload": "https://agora.xtec.cat/ceipsantacreudecalafell/wp-content/uploads/usu1567/2019/03/DSC_0001-Custom-768x512.jpeg",
+    "visibility": "1",
+    "id": "7eb32be4-fa4a-48ba-a711-c7ac343434d5f9",
+    "author": { "email": "armand2@gmail.com", "name": "Armand 2" }
+  },
+
+  {
+    "latitude": 41.1795456,
+    "longitude": 1.5695872,
+    "name": "Escola Vilanova de Segrià",
+    "description": "On Crist va perdre les espardenyes",
+    "upload": "https://agora.xtec.cat/zeraltsegria/wp-content/uploads/usu461/2015/09/vilanova.jpg",
+    "visibility": "1",
+    "id": "7eb32be4-fa4a-48ba-a711-c7ac1433434bd5f9",
+    "author": { "email": "armand2@gmail.com", "name": "Armand 2" }
+  }
+]

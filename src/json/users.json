@@ -1,0 +1,42 @@
+[
+	{
+		"id" : 1,
+		"name" : "superadmin",
+		"email" : "projectem7armand@fp.insjoaquimmir.cat",
+		"email_verified_at" : null,
+		"password" : "$2y$10$arWWrWhSUL4bhdz1STFztOLgMf3IhQHlafgp8JGYXy6JymMv3r0yi",
+		"remember_token" : null,
+		"created_at" : "2022-11-17 23:09:45",
+		"updated_at" : "2022-11-17 23:09:45"
+	},
+	{
+		"id" : 2,
+		"name" : "armand",
+		"email" : "armandmt@gmail.com",
+		"email_verified_at" : null,
+		"password" : "$2y$10$nyYHzUKlxGeXu.Wgg39QD.h8rT2xXXFX8CDoQBZ4Al1XwYLWT0g9i",
+		"remember_token" : null,
+		"created_at" : "2022-11-18 14:31:43",
+		"updated_at" : "2022-12-05 11:41:34"
+	},
+	{
+		"id" : 3,
+		"name" : "ArmandEditor",
+		"email" : "amata3@xtec.cat",
+		"email_verified_at" : null,
+		"password" : "$2y$10$ZgB3vSJ7uvB7XqKkTHj3HuPt8t2yOz6Ee8ngsIQIihhwU1u7MYw7C",
+		"remember_token" : null,
+		"created_at" : "2022-12-02 17:35:14",
+		"updated_at" : "2022-12-05 11:40:08"
+	},
+	{
+		"id" : 8,
+		"name" : "Armand Profe",
+		"email" : "armand.mata@insjoaquimmir.cat",
+		"email_verified_at" : null,
+		"password" : "$2y$10$gYXn1Ys6MQ3P6koSabmcUO7souRi5wZjXi74ok.EOeGHUW0wdBhqK",
+		"remember_token" : "4LOHCyUAu0BxyTf7t4E4WsGNOrajvMHoK1D6o4zpizFxpyEIIFxlWJq9rT9o",
+		"created_at" : "2022-12-02 18:33:15",
+		"updated_at" : "2022-12-06 16:46:24"
+	}
+]

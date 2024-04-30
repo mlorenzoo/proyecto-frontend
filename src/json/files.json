@@ -1,0 +1,52 @@
+{
+"files": [
+	{
+		"id" : 1,
+		"filepath" : "uploads\/1668794102_IMG_9145.jpg",
+		"filesize" : 90158,
+		"created_at" : "2022-11-18 17:55:02",
+		"updated_at" : "2022-11-18 17:55:02"
+	},
+	{
+		"id" : 7,
+		"filepath" : "uploads\/1670344757_122540966_3691138774282740_8925194586678615331_n.jpg",
+		"filesize" : 38513,
+		"created_at" : "2022-12-06 15:39:48",
+		"updated_at" : "2022-12-06 16:39:17"
+	},
+	{
+		"id" : 8,
+		"filepath" : "uploads\/1670344842_602eb3052900f.r_d.692-1213-4233.jpeg",
+		"filesize" : 54526,
+		"created_at" : "2022-12-06 16:40:42",
+		"updated_at" : "2022-12-06 16:40:42"
+	},
+	{
+		"id" : 9,
+		"filepath" : "uploads\/1670344988_unnamed.jpg",
+		"filesize" : 121121,
+		"created_at" : "2022-12-06 16:43:08",
+		"updated_at" : "2022-12-06 16:43:08"
+	},
+	{
+		"id" : 10,
+		"filepath" : "uploads\/1670345065_playa-sant-salvador-vendrell-s495243679.jpg",
+		"filesize" : 284117,
+		"created_at" : "2022-12-06 16:44:25",
+		"updated_at" : "2022-12-06 16:44:25"
+	},
+	{
+		"id" : 11,
+		"filepath" : "uploads\/1670345267_viñedos-toscana.jpg",
+		"filesize" : 179253,
+		"created_at" : "2022-12-06 16:47:47",
+		"updated_at" : "2022-12-06 16:47:47"
+	},
+	{
+		"id" : 12,
+		"filepath" : "uploads\/1670345399_Lake-Como-min-1.jpg",
+		"filesize" : 355646,
+		"created_at" : "2022-12-06 16:49:59",
+		"updated_at" : "2022-12-06 16:49:59"
+	}
+]}

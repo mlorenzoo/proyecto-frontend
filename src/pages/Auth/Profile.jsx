@@ -9,7 +9,7 @@ export default function Profile() {
 	Logger.debug("Profile page")
 
 	const { authToken } = useUserContext()
-	const { authService } = useServicesContext()
+	const { authService, userService } = useServicesContext()
 
 	const [ profile, setProfile ] = useState({})
 	
@@ -17,8 +17,9 @@ export default function Profile() {
 		(async () => {
 			// Auth 
 			try {
-				const data = await authService.user(authToken)
-				setProfile(data)
+				const data = await userService.getOne(authToken)
+				console.log(data);
+				setProfile(data.user)
 				return data
 			} catch (error) {
 				Logger.error(error.message)
@@ -34,9 +35,9 @@ export default function Profile() {
 				{ profile 
 					? 
 					<>
-						<h3 className="mt-4">Nom d'usuari/a:</h3>
-						<p>{profile.username}</p>
-						<h3 className="mt-4">Correu electrònic:</h3>
+						<h3 className="mt-4">Nombre:</h3>
+						<p>{profile.name} {profile.surname}</p>
+						<h3 className="mt-4">Correo electónico:</h3>
 						<p>{profile.email}</p>
 					</>
 					: 

@@ -21,6 +21,7 @@ export default function Login() {
 		try {
 			const authToken = await authService.doLogin(data.email, data.password)
 			console.log(authToken)
+			console.log(data)
 			if (authToken) {
 				const user = { "email": data.email, "remember": data.remember }
 				// Session			

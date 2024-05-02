@@ -3,15 +3,16 @@ import Logger from '../library/Logger'
 import { useLocation, useNavigate, Link } from 'react-router-dom'
 import useUserContext from '../hooks/useUserContext'
 import useServicesContext from '../hooks/useServicesContext'
+import { useState, useEffect } from 'react'
 
 export function Header() {
 
 	Logger.debug("Header component")
 	const location = useLocation()
 	const navigate = useNavigate()
-
+	const [ profile, setProfile ] = useState({})
 	const { authToken, setAuthToken, user, setUser } = useUserContext()
-	const { authService, lSessionService, sSessionService } = useServicesContext()
+	const { authService, userService, lSessionService, sSessionService } = useServicesContext()
 
 	async function handleLogout() {
 		Logger.debug("User logout")
@@ -36,6 +37,21 @@ export function Header() {
 		}
 	}
 
+	useEffect(() => {
+		(async () => {
+			// Auth 
+			try {
+				const data = await userService.getOne(authToken)
+				console.log(data);
+				setProfile(data.user)
+				return data
+			} catch (error) {
+				Logger.error(error.message)
+			}
+		})()
+	}, [])
+	console.log(profile)
+
 	return (
 		<header>
 			<Navbar collapseOnSelect expand="md" bg="primary" data-bs-theme="dark">
@@ -48,8 +64,8 @@ export function Header() {
 							<Nav.Link as={Link} to="/users" eventKey={"/users"}>Usuari(e)s</Nav.Link>
 							{user ? (
 								<>
-									<Nav.Link as={Link} to="/profile">{user.email}</Nav.Link>
-									<Button variant="secondary" onClick={handleLogout}>Desconnectar</Button>
+									<Nav.Link as={Link} to="/profile">{profile.role}</Nav.Link>
+									<Button variant="danger" onClick={handleLogout}>Desconnectar</Button>
 								</>
 							) : (
 								<>

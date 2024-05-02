@@ -14,6 +14,7 @@ import ProductList from './pages/Product/ProductList'
 import ProductView from './pages/Product/ProductView'
 import UserList from './pages/User/UserList'
 import UserView from './pages/User/UserView'
+import AltaGestor from './pages/Admin/AltaGestor'
 
 function App() {
 
@@ -40,6 +41,7 @@ function App() {
           <Route path="/products/:id" element={<ProductView />} />
           <Route path="/users" element={<UserList />} />
           <Route path="/users/:id" element={<UserView />} />
+          <Route path="/alta-gestor" element={<AltaGestor />} />
         </Routes>
       </UserContextProvider>
     </ServicesContextProvider>

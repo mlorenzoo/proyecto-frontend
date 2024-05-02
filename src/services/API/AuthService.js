@@ -46,6 +46,29 @@ export default class AuthService {
     }
   }
 
+  async doRegisterRole(name, surname, email, password, role) {
+    try {
+      const url = process.env.API_URL + "/register";
+      const resp = await fetch(url, {
+        headers: {
+          "Accept": "application/json",
+          "Content-Type": "application/json"
+        },
+        method: "POST",
+        body: JSON.stringify({ name, surname, email, password, role }) // Envía los datos de registro como JSON
+      });
+      const json = await resp.json();
+      console.log(json);
+      if (json.success) {
+        return json.authToken; // Retorna el token de autenticación si el registro es exitoso
+      } else {
+        throw new Error("Unable to register");
+      }
+    } catch (error) {
+      throw error;
+    }
+  }
+
   async doLogout(authToken) {
     try {
       const url = process.env.API_URL + "/logout";

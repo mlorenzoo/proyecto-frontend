@@ -56,21 +56,56 @@ export function Header() {
 		<header>
 			<Navbar collapseOnSelect expand="md" bg="primary" data-bs-theme="dark">
 				<Container>
-					<Navbar.Brand as={Link} to="/">React + React Bootstrap</Navbar.Brand>
+					<Navbar.Brand as={Link} to="/">CORTEZ</Navbar.Brand>
 					<Navbar.Toggle aria-controls="responsive-navbar-nav" />
-					<Navbar.Collapse id="responsive-navbar-nav" className="justify-content-end">						
+					<Navbar.Collapse id="responsive-navbar-nav" className="justify-content-end">				
 						<Nav activeKey={location.pathname}>
-							<Nav.Link as={Link} to="/products" eventKey={"/products"}>Productes</Nav.Link>
-							<Nav.Link as={Link} to="/users" eventKey={"/users"}>Usuari(e)s</Nav.Link>
-							{user ? (
+						{user ? (
 								<>
-									<Nav.Link as={Link} to="/profile">{profile.role}</Nav.Link>
-									<Button variant="danger" onClick={handleLogout}>Desconnectar</Button>
+
+									{profile.role === "Admin" && (
+										<>
+											<Nav.Link as={Link} to="/alta-gestor" eventKey={"/products"}>Soy</Nav.Link>
+											<Nav.Link as={Link} to="/users" eventKey={"/users"}>Admin</Nav.Link>
+											<Nav.Link as={Link} to="/profile">{profile.role}</Nav.Link>
+											<Button variant="danger" onClick={handleLogout}>Desconnectar</Button>
+										</>
+									)}
+
+									{profile.role === "Gestor" && (
+										<>
+											<Nav.Link as={Link} to="/products" eventKey={"/products"}>Soy</Nav.Link>
+											<Nav.Link as={Link} to="/users" eventKey={"/users"}>Gestor</Nav.Link>
+											<Nav.Link as={Link} to="/profile">{profile.role}</Nav.Link>
+											<Button variant="danger" onClick={handleLogout}>Desconnectar</Button>
+										</>
+									)}
+
+									{profile.role === "Barbero" && (
+										<>
+											<Nav.Link as={Link} to="/products" eventKey={"/products"}>Soy</Nav.Link>
+											<Nav.Link as={Link} to="/users" eventKey={"/users"}>Barbero</Nav.Link>
+											<Nav.Link as={Link} to="/profile">{profile.role}</Nav.Link>
+											<Button variant="danger" onClick={handleLogout}>Desconnectar</Button>
+										</>
+									)}
+
+									{profile.role === "Cliente" && (
+										<>
+											<Nav.Link as={Link} to="/products" eventKey={"/products"}>Soy</Nav.Link>
+											<Nav.Link as={Link} to="/users" eventKey={"/users"}>Cliente</Nav.Link>
+											<Nav.Link as={Link} to="/profile">{profile.role}</Nav.Link>
+											<Button variant="danger" onClick={handleLogout}>Desconnectar</Button>
+										</>
+									)}
+
 								</>
 							) : (
 								<>
 									<Nav.Link as={Link} to="/login" eventKey={"/login"}>Inici de sessió</Nav.Link>
-									<Nav.Link as={Link} to="/register" eventKey={"/register"}>Registre</Nav.Link>
+									<Button as={Link} to="/register" variant="secondary">
+										Registre
+									</Button>
 								</>
 							)}
 						</Nav>

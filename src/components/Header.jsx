@@ -55,8 +55,8 @@ export function Header() {
 	return (
 		<header>
 			<Navbar collapseOnSelect expand="md" bg="primary" data-bs-theme="dark">
-				<Container>
-					<Navbar.Brand as={Link} to="/">CORTEZ</Navbar.Brand>
+				<Container fluid>
+					<Navbar.Brand as={Link} to="/" className="custom-navbar-brand">CORTE-Z</Navbar.Brand>
 					<Navbar.Toggle aria-controls="responsive-navbar-nav" />
 					<Navbar.Collapse id="responsive-navbar-nav" className="justify-content-end">				
 						<Nav activeKey={location.pathname}>

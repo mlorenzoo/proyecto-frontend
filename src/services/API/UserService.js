@@ -25,7 +25,7 @@ export default class UserService {
 	async getAll(filters = {}) {
 		try {
 			const params = new URLSearchParams(filters)
-			const url = process.env.API_URL + `/users?${params}`
+			const url = process.env.API_URL + `/users`
 			const resp = await fetch(url, {
 				headers: {
 					"Accept": "application/json"
@@ -33,6 +33,7 @@ export default class UserService {
 				method: "GET",
 			});
 			const json = await resp.json();
+			console.log(json);
 			if (json.success) {				
 				return json.data;
 			} else {

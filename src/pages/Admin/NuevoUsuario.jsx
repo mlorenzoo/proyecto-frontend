@@ -8,7 +8,7 @@ import useServicesContext from '../../hooks/useServicesContext'
 import { Formik } from 'formik'
 import * as Yup from 'yup'
 
-export default function AltaGestor() {
+export default function NuevoUsuario() {
 
 	const navigate = useNavigate()
 	
@@ -40,7 +40,7 @@ export default function AltaGestor() {
 	return (
 		<Layout>
 			<section id="login" className="w-75 m-auto">
-				<h2>Nuevo gestor</h2>
+				<h2>Nuevo usuario</h2>
 				<Formik
 					validationSchema={schema}
 					onSubmit={onSubmit}

@@ -22,6 +22,28 @@ export default class UserService {
 		}
 	}
 
+	async getOneById(id) {
+		try {
+			const url = process.env.API_URL + `/users/${id}`
+			const resp = await fetch(url, {
+				headers: {
+					"Accept": "application/json"
+				},
+				method: "GET",
+			});
+			const json = await resp.json();
+			console.log(json)
+			if (json.success) {
+				console.log(json.data)
+				return json.data;
+			} else {
+				throw new Error("Unable to get user ")
+			}
+		} catch (error) {
+			throw error
+		}
+	}
+
 	async getAll(filters = {}) {
 		try {
 			const params = new URLSearchParams(filters)
@@ -31,6 +53,29 @@ export default class UserService {
 					"Accept": "application/json"
 				},
 				method: "GET",
+			});
+			const json = await resp.json();
+			console.log(json);
+			if (json.success) {				
+				return json.data;
+			} else {
+				throw new Error("Unable to get all users")
+			}
+		} catch (error) {
+			throw error
+		}
+	}
+
+	async doEdit(id, name, surname, email, password, role) {
+		try {
+			console.log(name);
+			const url = process.env.API_URL + `/users/${id}`
+			const resp = await fetch(url, {
+				headers: {
+					"Accept": "application/json"
+				},
+				method: "PUT",
+				body: JSON.stringify({ name, surname, email, password, role })
 			});
 			const json = await resp.json();
 			console.log(json);

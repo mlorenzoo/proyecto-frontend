@@ -8,3 +8,21 @@ $body-bg: #673ab80a !default;
 //
 // Custom styles
 //
+.custom-button {
+  border-radius: 30px;
+  margin-left: 10px;
+}
+
+html {
+  height: 100vh;
+}
+
+body {
+  color: white;
+  min-height: 100vh;
+  background-color: black;
+}
+
+::placeholder {
+  color: #ccc; /* Color gris más claro */
+}

@@ -12,6 +12,11 @@
   filter: drop-shadow(0 0 2em #61dafbaa);
 }
 
+.container h1,
+.container h3,
+.container p {
+    color: white;
+}
 
 @keyframes logo-spin {
   from {

@@ -102,9 +102,11 @@ export function Header() {
 								</>
 							) : (
 								<>
-									<Nav.Link as={Link} to="/login" eventKey={"/login"}>Inici de sessió</Nav.Link>
-									<Button as={Link} to="/register" variant="secondary">
-										Registre
+									<Button as={Link} to="/login" variant="primary" className='custom-button'>
+										INICIAR SESIÓN
+									</Button>
+									<Button as={Link} to="/register" variant="secondary" className='custom-button'>
+										ÚNETE YA
 									</Button>
 								</>
 							)}

@@ -15,16 +15,14 @@ export default function Home() {
 				<div className="row">
 					<div className="col-md-6">
 						<section className="text-center">
-							<h1>CORTEZ</h1>
+							<h1 className=''>CORTEZ</h1>
 							<p className=''>Cortes exclusivos,comodidad sin igual. Únete a la experiencia de suscripción</p>
 							<h3>24,99€/mes</h3>
-							<Button variant="secondary ">SUSCRÍBETE YA</Button>{' '}
+							<Button variant="secondary" className='custom-button'>SUSCRÍBETE YA</Button>{' '}
 						</section>
 					</div>
 					<div className="col-md-6">
 						<div>
-							<h2>¡Bienvenido a nuestro sitio web!</h2>
-							<p>Descubre cómo Vite y React pueden acelerar tu desarrollo web.</p>
 						</div>
 					</div>
 				</div>

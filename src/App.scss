@@ -2,7 +2,7 @@
 // Bootstrap framework + Theme
 //
 $primary: #292929 !default;
-$body-bg: #673ab80a !default;
+$body-bg: #590aea0a !default;
 @import "bootstrap/scss/bootstrap";
 
 //
@@ -32,8 +32,4 @@ body {
   color: white;
   min-height: 100vh;
   background-color: black;
-}
-
-::placeholder {
-  color: #ccc; /* Color gris más claro */
 }

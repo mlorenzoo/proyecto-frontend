@@ -18,7 +18,8 @@ export default function UserList() {
 	useEffect(() => {
 		(async () => {
 			try {
-				const data = await userService.getAll(queryParams)
+				const data = await userService.getAll()
+				console.log(data);
 				setUsers(data)
 				return data
 			} catch (error) {

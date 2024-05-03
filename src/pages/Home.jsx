@@ -1,26 +1,19 @@
 import React from 'react';
 import { Container, Row, Col, Button } from 'react-bootstrap';
-import Layout from '../components/Layout'; // Importar el componente Layout
+import Layout from '../components/Layout';
 
 function HomePage() {
   return (
     <Layout>
       <Container>
-        <Row>
-          {/* Columna para el texto */}
-          <Col md={6}>
-            <section className="text-center text-md-start"> {/* Agregando la clase text-md-start */}
+        <Row className="fila">
+          <Col md={3} style={{ height: '100%',  marginTop: '300px' }}> {/* Aplicando altura del 100% a la columna */}
+            <section className="text-center" style={{ height: '100%' }}> {/* Aplicando altura del 100% al section */}
               <h1>CORTE-Z</h1>
               <p>Cortes exclusivos, comodidad sin igual. Únete a la experiencia de suscripción</p>
               <h3>24,99€/mes</h3>
               <Button variant="secondary" className='custom-button'>SUSCRÍBETE YA</Button>{' '}
             </section>
-          </Col>
-          {/* Columna para la imagen (vacía en este ejemplo) */}
-          <Col md={6}>
-            <div>
-              {/* Aquí podrías incluir tu imagen */}
-            </div>
           </Col>
         </Row>
       </Container>

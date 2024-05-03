@@ -24,12 +24,13 @@ $body-bg: #590aea0a !default;
   margin-right: 1%;
 }
 
-.home-container {
-  height: 100vh;
-}
-
 body {
   color: white;
   min-height: 100vh;
   background-color: black;
+}
+
+.fila{
+  height: 100%;
+  align-items: center;
 }

@@ -12,12 +12,12 @@ export default function UserView() {
 
 	const { userService } = useServicesContext()
 
-	const [ user, setUser ] = useState(null)
-	
+	const [user, setUser] = useState(null)
+
 	useEffect(() => {
 		(async () => {
 			try {
-				const data = await userService.getOne(id)
+				const data = await userService.getOneById(id)
 				setUser(data)
 				return data
 			} catch (error) {
@@ -25,21 +25,24 @@ export default function UserView() {
 				alert("ERROR carregant usuari/a... :-(")
 			}
 		})()
-	}, [])
+	}, [id])
 
 	return (
 		<Layout>
 			<section id="user" className="w-75 m-auto">
-				{ user
-					? 
+				{user ? (
 					<>
-						<h2>{user.name}</h2>
+						<h2>{user.name} {user.surname}</h2>
+						<br />
+						<h3>Email</h3>
 						<p>{user.email}</p>
-						<p>{user.created}</p>
+						<h3>Rol</h3>
+						<p>{user.role}</p>
+						{/* Aquí puedes agregar más detalles sobre el usuario si es necesario */}
 					</>
-					: 
+				) : (
 					<p>Carregant usuari/a...</p>
-				}
+				)}
 			</section>
 		</Layout>
 	)

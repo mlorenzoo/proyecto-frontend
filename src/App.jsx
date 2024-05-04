@@ -15,6 +15,7 @@ import ProductView from './pages/Product/ProductView'
 import UserList from './pages/User/UserList'
 import UserView from './pages/User/UserView'
 import NuevoUsuario from './pages/Admin/NuevoUsuario'
+import EditarUsuario from './pages/Admin/EditarUsuario'
 
 function App() {
 
@@ -40,7 +41,9 @@ function App() {
           <Route path="/products" element={<ProductList />} />
           <Route path="/products/:id" element={<ProductView />} />
           <Route path="/users" element={<UserList />} />
+          <Route path="/users/:id" element={<UserView />} />
           <Route path="/nuevo-usuario" element={<NuevoUsuario />} />
+          <Route path="/editar/:id" element={<EditarUsuario />} />
         </Routes>
       </UserContextProvider>
     </ServicesContextProvider>

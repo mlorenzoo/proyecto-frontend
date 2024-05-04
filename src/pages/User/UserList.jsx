@@ -2,7 +2,7 @@ import Layout from '../../components/Layout'
 import Logger from '../../library/Logger'
 import useServicesContext from '../../hooks/useServicesContext'
 import { useState, useEffect } from 'react'
-import { Button, Card, Col, Form, Row } from 'react-bootstrap'
+import { Button, Form, Row, Col, Table, Modal } from 'react-bootstrap'
 import { Link, useSearchParams } from 'react-router-dom'
 
 export default function UserList() {
@@ -11,9 +11,11 @@ export default function UserList() {
 
 	const { userService } = useServicesContext()
 
-	const [ users, setUsers ] = useState(null)
+	const [users, setUsers] = useState(null)
+	const [showModal, setShowModal] = useState(false)
+	const [userToDelete, setUserToDelete] = useState(null)
 
-	const [ queryParams, setQueryParams ] = useSearchParams();
+	const [queryParams, setQueryParams] = useSearchParams();
 
 	useEffect(() => {
 		(async () => {
@@ -36,10 +38,27 @@ export default function UserList() {
 		setQueryParams(params);
 	}
 
+	const handleShowModal = (user) => {
+		setUserToDelete(user)
+		setShowModal(true)
+	}
+
+	const handleCloseModal = () => {
+		setShowModal(false)
+		setUserToDelete(null)
+	}
+
+	const handleDeleteUser = () => {
+		if (userToDelete) {
+			
+			handleCloseModal();
+		}
+	}
+
 	return (
 		<Layout>
 			<section id="users" className="w-75 m-auto">
-				<h2>Usuari(e)s</h2>
+				<h2>Usuarios</h2>
 				<Form onSubmit={handleSubmit}>
 					<Row>
 						<Col>
@@ -47,39 +66,70 @@ export default function UserList() {
 								<Form.Control
 									type="text"
 									name="name"
-									placeholder="Introdueix nom de l'usuari/a..."
+									placeholder="Introduce el nombre del usuario/a..."
 									defaultValue={queryParams.get('name')}
 								/>
 							</Form.Group>
 						</Col>
 						<Col>
 							<Button variant="primary" type="submit">
-								Cercar
+								Buscar
 							</Button>
 						</Col>
 					</Row>
 				</Form>
-				{ users 
-					? 
-					<Row xs={1} md={2} lg={3} className="g-4">
-						{users.map((user) => (
-							<Col key={user.id}>
-								<Card>
-									<Card.Body>
-										<Card.Title>
-											<Link to={`/users/${user.id}`}>{user.name}</Link>
-										</Card.Title>
-										<Card.Text>
-											<p>{user.email}</p>
-										</Card.Text>
-									</Card.Body>
-								</Card>
-							</Col>
-						))}
-					</Row>
-					: 
+				{users ? (
+					<>
+						<Table striped bordered hover>
+							<thead>
+								<tr>
+									<th>ID</th>
+									<th>Nombre</th>
+									<th>Email</th>
+									<th>Rol</th>
+									<th>Editar</th>
+									<th>Eliminar</th>
+								</tr>
+							</thead>
+							<tbody>
+								{users.map((user) => (
+									<tr key={user.id}>
+										<td>{user.id}</td>
+										<td>
+											<Link to={`/users/${user.id}`}>{user.name} {user.surname}</Link>
+										</td>
+										<td>{user.email}</td>
+										<td>{user.role}</td>
+										<td>
+											<Link to={`/editar/${user.id}`} role="button" aria-label="Editar">
+												✏️
+											</Link>
+										</td>
+										<td>
+											<span role="img" aria-label="Eliminar" style={{ cursor: 'pointer' }} onClick={() => handleShowModal(user)}>❌</span>
+										</td>
+									</tr>
+								))}
+							</tbody>
+						</Table>
+						<Modal show={showModal} onHide={handleCloseModal}>
+							<Modal.Header closeButton>
+								<Modal.Title>Confirmar eliminación</Modal.Title>
+							</Modal.Header>
+							<Modal.Body>¿Estás seguro que quieres eliminar el usuario?</Modal.Body>
+							<Modal.Footer>
+								<Button variant="secondary" onClick={handleCloseModal}>
+									Cancelar
+								</Button>
+								<Button variant="danger" onClick={handleDeleteUser}>
+									Eliminar
+								</Button>
+							</Modal.Footer>
+						</Modal>
+					</>
+				) : (
 					<p>Carregant llistat...</p>
-				}
+				)}
 			</section>
 		</Layout>
 	)

@@ -66,7 +66,7 @@ export function Header() {
 									{profile.role === "Admin" && (
 										<>
 											<Nav.Link as={Link} to="/nuevo-usuario" eventKey={"/products"}>NUEVO USUARIO</Nav.Link>
-											<Nav.Link as={Link} to="/users" eventKey={"/users"}>Admin</Nav.Link>
+											<Nav.Link as={Link} to="/users" eventKey={"/users"}>LISTA USUARIOS</Nav.Link>
 											<Nav.Link as={Link} to="/profile">{profile.name} {profile.role}</Nav.Link>
 											<Button variant="danger" onClick={handleLogout}>Desconnectar</Button>
 										</>

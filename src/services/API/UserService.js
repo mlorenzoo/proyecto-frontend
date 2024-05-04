@@ -89,4 +89,26 @@ export default class UserService {
 		}
 	}
 
+	async doDelete(id) {
+		try {
+			console.log(name);
+			const url = process.env.API_URL + `/users/${id}`
+			const resp = await fetch(url, {
+				headers: {
+					"Accept": "application/json"
+				},
+				method: "DELETE"
+			});
+			const json = await resp.json();
+			console.log(json);
+			if (json.success) {				
+				return json.data;
+			} else {
+				throw new Error("Unable to get all users")
+			}
+		} catch (error) {
+			throw error
+		}
+	}
+
 }

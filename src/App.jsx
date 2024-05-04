@@ -16,6 +16,9 @@ import UserList from './pages/User/UserList'
 import UserView from './pages/User/UserView'
 import NuevoUsuario from './pages/Admin/NuevoUsuario'
 import EditarUsuario from './pages/Admin/EditarUsuario'
+import Pricing from './pages/Client/Pricing'
+import ListSubscriptions from './pages/Admin/ListSubscriptions'
+import NewPlan from './pages/Gestor/NewPlan'
 
 function App() {
 
@@ -44,6 +47,9 @@ function App() {
           <Route path="/users/:id" element={<UserView />} />
           <Route path="/nuevo-usuario" element={<NuevoUsuario />} />
           <Route path="/editar/:id" element={<EditarUsuario />} />
+          <Route path="/pricing" element={<Pricing />} />
+          <Route path="/subscriptions" element={<ListSubscriptions />} />
+          <Route path="/new-plan" element={<NewPlan />} />
         </Routes>
       </UserContextProvider>
     </ServicesContextProvider>

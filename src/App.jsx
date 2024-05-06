@@ -19,6 +19,8 @@ import EditarUsuario from './pages/Admin/EditarUsuario'
 import Pricing from './pages/Client/Pricing'
 import ListSubscriptions from './pages/Admin/ListSubscriptions'
 import NewPlan from './pages/Gestor/NewPlan'
+import NewBarbershop from './pages/Gestor/NewBarbershop'
+import BarbershopList from './pages/Barbershops/BarbershopList'
 
 function App() {
 
@@ -50,6 +52,8 @@ function App() {
           <Route path="/pricing" element={<Pricing />} />
           <Route path="/subscriptions" element={<ListSubscriptions />} />
           <Route path="/new-plan" element={<NewPlan />} />
+          <Route path="/new-barbershop" element={<NewBarbershop />} />
+          <Route path="/barbershops" element={<BarbershopList />} />
         </Routes>
       </UserContextProvider>
     </ServicesContextProvider>

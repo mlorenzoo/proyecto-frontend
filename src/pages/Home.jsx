@@ -5,19 +5,24 @@ import Layout from '../components/Layout';
 function HomePage() {
   return (
     <Layout>
-      <Container>
-        <Row className="fila">
-          <Col md={3} style={{ height: '100%',  marginTop: '300px' }}> {/* Aplicando altura del 100% a la columna */}
-            <section className="text-center" style={{ height: '100%' }}> {/* Aplicando altura del 100% al section */}
+      <Container fluid>
+        <Row className="home-page">
+          <Col md={2} className="left-col">
+            <section className="custom-section text">
               <h1>CORTE-Z</h1>
               <p>Cortes exclusivos, comodidad sin igual. Únete a la experiencia de suscripción</p>
-              <h3>24,99€/mes</h3>
+              <h2>24,99€/mes</h2>
               <Button variant="secondary" className='custom-button'>SUSCRÍBETE YA</Button>{' '}
             </section>
           </Col>
+          <Col md={10} className="right-col">
+            <div className="custom-section">
+              <img src="src/assets/shop.jpeg" alt="Imagen"/>
+            </div>
+          </Col>
         </Row>
       </Container>
-    </Layout>
+    </Layout> 
   );
 }
 

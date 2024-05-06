@@ -51,7 +51,7 @@ export default function Login() {
 	return (
 		<Layout>
 			<section id="login" className="w-75 m-auto">
-				<h2>Inici de sessió</h2>
+				<h1>Inici de sessió</h1>
 				<Formik
 					validationSchema={schema}
 					onSubmit={onSubmit}
@@ -76,7 +76,7 @@ export default function Login() {
 								<Form.Control.Feedback type="invalid">
 									{errors.email}
 								</Form.Control.Feedback>
-							</Form.Group>
+							</Form.Group>	
 							<Form.Group className="mb-3" controlId="formPassword">
 								<Form.Label>Contrasenya</Form.Label>
 								<Form.Control
@@ -91,7 +91,7 @@ export default function Login() {
 									{errors.password}
 								</Form.Control.Feedback>
 							</Form.Group>
-							<Form.Group className="mb-3" controlId="formCheckbox">
+							<Form.Group className="mb-3 check" controlId="formCheckbox">
 								<Form.Check
 									type="checkbox"
 									name="remember"

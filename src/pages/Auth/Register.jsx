@@ -39,7 +39,7 @@ export default function Register() {
 	return (
 		<Layout>
 			<section id="register" className=" w-75 m-auto">
-				<h2>Registre</h2>
+				<h1>Registre</h1>
 				<Formik
 					validationSchema={schema}
 					onSubmit={onSubmit}
@@ -127,7 +127,7 @@ export default function Register() {
 								{errors.repeatPassword}
 							</Form.Control.Feedback>	
 						</Form.Group>
-						<Form.Group className="mb-3" controlId="formCheckbox">
+						<Form.Group className="mb-3 check" controlId="formCheckbox">
 							<Form.Check 
 								type="checkbox" 
 								name="accept" 

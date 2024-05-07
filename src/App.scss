@@ -84,30 +84,30 @@ body {
   object-fit: cover;
 }
 
-#login{
+#login, #register {
   font-family: 'Inter', sans-serif;
-}
 
-#login h1{
-  text-align: center;
-  margin-bottom: 100px;
-  margin-top: 100px;
-  font-size: 36px;
-  font-weight: bold;
-}
+  h1 {
+    text-align: center;
+    margin-bottom: 100px;
+    margin-top: 100px;
+    font-size: 36px;
+    font-weight: bold;
+  }
 
-#login form{
-  font-weight: bold;
-  font-size: 18px;
-}
+  form {
+    font-weight: bold;
+    font-size: 18px;
 
-#login .check{
-  font-size: 18px;
-  font-weight: normal;
-}
+    .check {
+      font-size: 18px;
+      font-weight: normal;
+    }
 
-#login button{
-  font-weight: bold;
-  font-size: 18px;
-  margin-top: 3%;
+    button {
+      font-weight: bold;
+      font-size: 18px;
+      margin-top: 3%;
+    }
+  }
 }

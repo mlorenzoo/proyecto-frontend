@@ -20,7 +20,7 @@ export default function NuevoUsuario() {
 		// Auth 
 		try {
 			await authService.doRegisterRole(data.name, data.surname, data.email, data.password, data.role)
-			navigate("/login")
+			navigate("/users")
 			alert("Registre OK!")
 		} catch (error) {
 			Logger.error(error.message)

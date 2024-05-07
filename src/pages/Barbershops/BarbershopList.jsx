@@ -11,9 +11,9 @@ export default function BarbershopList() {
 
   const { bsService } = useServicesContext()
 
-  const [users, setUsers] = useState(null)
+  const [barbershops, setBarbershops] = useState(null)
   const [showModal, setShowModal] = useState(false)
-  const [userToDelete, setUserToDelete] = useState(null)
+  const [barbershopToDelete, setBarbershopToDelete] = useState(null)
 
   const [queryParams, setQueryParams] = useSearchParams();
 
@@ -22,7 +22,7 @@ export default function BarbershopList() {
       try {
         const data = await bsService.getBarbershop()
         console.log(data);
-        setUsers(data)
+        setBarbershops(data)
         return data
       } catch (error) {
         Logger.error(error.message)
@@ -38,26 +38,35 @@ export default function BarbershopList() {
     setQueryParams(params);
   }
 
-  const handleShowModal = (user) => {
-    setUserToDelete(user)
+  const handleShowModal = (barbershop) => {
+    setBarbershopToDelete(barbershop)
     setShowModal(true)
   }
 
   const handleCloseModal = () => {
     setShowModal(false)
-    setUserToDelete(null)
+    setBarbershopToDelete(null)
   }
 
-  const handleDeleteUser = () => {
-    if (userToDelete) {
-      // Perform delete operation
-      handleCloseModal();
+  const handleDeleteBarbershop = async () => {
+    if (barbershopToDelete) {
+      try {
+        await bsService.delBarbershop(barbershopToDelete.id);
+        // Actualizar la lista de barberías después de eliminar la barbería
+        const updatedBarbershops = barbershops.filter(barbershop => barbershop.id !== barbershopToDelete.id);
+        setBarbershops(updatedBarbershops);
+        handleCloseModal();
+        alert("Barbería eliminada con éxito!");
+      } catch (error) {
+        Logger.error(error.message);
+        alert("ERROR al eliminar barbería");
+      }
     }
   }
 
   return (
     <Layout>
-      <section id="users" className="w-75 m-auto">
+      <section id="barbershops" className="w-75 m-auto">
         <h2>Barberías</h2>
         <Form onSubmit={handleSubmit}>
           <Row>
@@ -75,23 +84,28 @@ export default function BarbershopList() {
               <Button variant="primary" type="submit">
                 Buscar
               </Button>
+              <Link to="/new-barbershop">
+                <Button variant="success">
+                  Añadir barbería
+                </Button>
+              </Link>
             </Col>
           </Row>
         </Form>
         <div className="card-container">
-          {users ? (
-            users.map((user) => (
-              <div key={user.id} className="card-wrapper">
+          {barbershops ? (
+            barbershops.map((barbershop) => (
+              <div key={barbershop.id} className="card-wrapper">
                 <Card style={{ width: '18rem' }} className="card">
                   <Card.Body>
-                    <Card.Title>{user.name}</Card.Title>
+                    <Card.Title>{barbershop.name}</Card.Title>
                     <Card.Text>
-                      Dirección: <br/>{user.ubication}
+                      Dirección: <br/>{barbershop.ubication}
                     </Card.Text>
-                    <Link to={`/users/${user.id}`}>
+                    <Link to={`/barbershops/${barbershop.id}`}>
                       <Button variant="primary">Ver detalles</Button>
                     </Link>
-                    <Button variant="danger" onClick={() => handleShowModal(user)}>Eliminar</Button>
+                    <Button variant="danger" onClick={() => handleShowModal(barbershop)}>Eliminar</Button>
                   </Card.Body>
                 </Card>
               </div>
@@ -104,12 +118,12 @@ export default function BarbershopList() {
           <Modal.Header closeButton>
             <Modal.Title>Confirmar eliminación</Modal.Title>
           </Modal.Header>
-          <Modal.Body>¿Estás seguro que quieres eliminar el usuario?</Modal.Body>
+          <Modal.Body>¿Estás seguro que quieres eliminar la barbería?</Modal.Body>
           <Modal.Footer>
             <Button variant="secondary" onClick={handleCloseModal}>
               Cancelar
             </Button>
-            <Button variant="danger" onClick={handleDeleteUser}>
+            <Button variant="danger" onClick={handleDeleteBarbershop}>
               Eliminar
             </Button>
           </Modal.Footer>

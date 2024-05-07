@@ -1,5 +1,26 @@
 export default class BarbershopsService {
 
+  async getBarbershop() {
+    try {
+      const url = process.env.API_URL + "/barbershops";
+      const resp = await fetch(url, {
+        headers: {
+          "Accept": "application/json"
+        },
+        method: "GET"
+      });
+      const json = await resp.json();
+      console.log(json.barbershops);
+      if (json.success) {        
+        return json.barbershops
+      } else {
+        throw new Error("Unable to login")
+      }
+    } catch (error) {
+      throw error
+    }
+  }
+
   async addBarbershop(name, ubication, gestor_id) {
     try {
       const url = process.env.API_URL + "/barbershops";
@@ -23,19 +44,19 @@ export default class BarbershopsService {
     }
   }
 
-  async getBarbershop() {
+  async delBarbershop(id) {
     try {
-      const url = process.env.API_URL + "/barbershops";
+      const url = process.env.API_URL + `/barbershops/${id}`;
       const resp = await fetch(url, {
         headers: {
           "Accept": "application/json"
         },
-        method: "GET"
+        method: "DELETE"
       });
       const json = await resp.json();
-      console.log(json.barbershops);
+      console.log(json);
       if (json.success) {        
-        return json.barbershops
+        
       } else {
         throw new Error("Unable to login")
       }
@@ -43,7 +64,6 @@ export default class BarbershopsService {
       throw error
     }
   }
-
   // async doRegister(name, surname, email, password) {
   //   try {
   //     const url = process.env.API_URL + "/register"; // Suponiendo que la ruta correcta para el registro es '/register'

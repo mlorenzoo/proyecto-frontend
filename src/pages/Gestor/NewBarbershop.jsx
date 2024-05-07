@@ -37,7 +37,7 @@ const NewBarbershop = () => {
     try {
       console.log(profile.id)
       await bsService.addBarbershop(data.barbershopName, data.address, profile.id);
-      navigate("/");
+      navigate("/barbershops");
       alert("Barbería añadida correctamente");
     } catch (error) {
       Logger.error(error.message);

@@ -31,13 +31,13 @@ export default function Profile() {
 	return (
 		<Layout>
 			<section id="profile" className="w-75 m-auto">
-				<h2>Perfil</h2>
+				<h1>Perfil</h1>
 				{ profile 
 					? 
 					<>
-						<h3 className="mt-4">Nombre:</h3>
+						<h2 className="mt-4">Nombre:</h2>
 						<p>{profile.name} {profile.surname}</p>
-						<h3 className="mt-4">Correo electónico:</h3>
+						<h2 className="mt-4">Correo electónico:</h2>
 						<p>{profile.email}</p>
 					</>
 					: 

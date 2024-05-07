@@ -54,7 +54,7 @@ export default function Register() {
 				>
 					{({ handleSubmit, handleChange, values, touched, errors }) => (
 					<Form noValidate onSubmit={handleSubmit}>
-						<Form.Group className="mb-3" controlId="formName">
+						<Form.Group className="mb-4" controlId="formName">
 							<Form.Label>Nom d'usuari/a</Form.Label>
 							<Form.Control 
 								type="text" 
@@ -68,7 +68,7 @@ export default function Register() {
 								{errors.name}
 							</Form.Control.Feedback>
 						</Form.Group>
-						<Form.Group className="mb-3" controlId="formSurname">
+						<Form.Group className="mb-4" controlId="formSurname">
 							<Form.Label>Apellido</Form.Label>
 							<Form.Control 
 								type="text" 
@@ -82,7 +82,7 @@ export default function Register() {
 								{errors.surname}
 							</Form.Control.Feedback>
 						</Form.Group>
-						<Form.Group className="mb-3" controlId="formEmail">
+						<Form.Group className="mb-4" controlId="formEmail">
 							<Form.Label>Adreça electrònica</Form.Label>
 							<Form.Control 
 								type="email" 
@@ -99,7 +99,7 @@ export default function Register() {
 								{errors.email}
 							</Form.Control.Feedback>							
 						</Form.Group>
-						<Form.Group className="mb-3" controlId="formPassword">
+						<Form.Group className="mb-4" controlId="formPassword">
 							<Form.Label>Contrasenya</Form.Label>
 							<Form.Control 
 								type="password" 
@@ -127,7 +127,7 @@ export default function Register() {
 								{errors.repeatPassword}
 							</Form.Control.Feedback>	
 						</Form.Group>
-						<Form.Group className="mb-3 check" controlId="formCheckbox">
+						<Form.Group className="mb-5 check" controlId="formCheckbox">
 							<Form.Check 
 								type="checkbox" 
 								name="accept" 

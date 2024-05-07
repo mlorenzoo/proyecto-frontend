@@ -64,7 +64,7 @@ export default function Login() {
 				>
 					{({ handleSubmit, handleChange, values, touched, errors }) => (
 						<Form noValidate onSubmit={handleSubmit}>
-							<Form.Group className="mb-3" controlId="formEmail">
+							<Form.Group className="mb-4" controlId="formEmail">
 								<Form.Label>Adreça electrònica</Form.Label>
 								<Form.Control
 									type="email"
@@ -92,7 +92,7 @@ export default function Login() {
 									{errors.password}
 								</Form.Control.Feedback>
 							</Form.Group>
-							<Form.Group className="mb-3 check" controlId="formCheckbox">
+							<Form.Group className="mb-5 check" controlId="formCheckbox">
 								<Form.Check
 									type="checkbox"
 									name="remember"

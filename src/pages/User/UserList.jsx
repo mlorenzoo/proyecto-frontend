@@ -64,11 +64,11 @@ export default function UserList() {
 
 	return (
 		<Layout>
-			<section id="users" className="w-75 m-auto">
+			<section id="users" className="w-75 m-auto users">
 				<h2>Usuarios</h2>
 				<Form onSubmit={handleSubmit}>
 					<Row>
-						<Col>
+						<Col className='buscador'>
 							<Form.Group className="mb-3" controlId="formSearch">
 								<Form.Control
 									type="text"

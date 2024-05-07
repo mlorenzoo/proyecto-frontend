@@ -37,8 +37,9 @@ export default function EditarUsuario() {
 		// Auth 
 		try {
       console.log(data.name);
-			await userService.doEdit(profile.id, data.name, data.surname, data.email, data.password, data.role)
+			await userService.doEdit(profile.id, data.name, data.surname, data.email, data.role)
 			alert("Usuario editado con éxito!")
+			navigate("/users")
 		} catch (error) {
 			Logger.error(error.message)
 			alert("ERROR(")
@@ -49,8 +50,6 @@ export default function EditarUsuario() {
     name: Yup.string().required('Aquest camp és obligatori'),
 		surname: Yup.string().required('Aquest camp és obligatori'),
 		email: Yup.string().email('Introdueix una adreça de correu vàlida').required('Aquest camp és obligatori'),
-		password: Yup.string().min(6, 'La contrasenya ha de tenir com a mínim 6 caràcters').required('Aquest camp és obligatori'),
-    repeatPassword: Yup.string().oneOf([Yup.ref('password'), null], 'Les contrasenyes no coincideixen').required('Aquest camp és obligatori'),
     role: Yup.string().notOneOf(['---'], 'Selecciona un rol').required('Selecciona un rol'),
 	});
 
@@ -65,9 +64,7 @@ export default function EditarUsuario() {
             name: '',
             surname: '',
 						email: '',
-						password: '',
-            repeatPassword: '',
-            role: '---',
+            role: profile.role,
 						remember: false
 					}}
 				>
@@ -115,34 +112,6 @@ export default function EditarUsuario() {
 									{errors.email}
 								</Form.Control.Feedback>
 							</Form.Group>
-							<Form.Group className="mb-3" controlId="formPassword">
-								<Form.Label>Contraseña</Form.Label>
-								<Form.Control
-									type="password"
-									name="password"
-									placeholder="Introduce la contraseña"
-									value={values.password}
-									onChange={handleChange}
-									isInvalid={!!errors.password}
-								/>
-								<Form.Control.Feedback type="invalid">
-									{errors.password}
-								</Form.Control.Feedback>
-							</Form.Group>
-              <Form.Group className="mb-3" controlId="formRepeatPassword">
-                <Form.Label>Repeteix contrasenya</Form.Label>
-                <Form.Control 
-                  type="password" 
-                  name="repeatPassword" 
-                  placeholder="Repite la contraseña" 
-                  value={values.repeatPassword}
-                  onChange={handleChange}
-                  isInvalid={!!errors.repeatPassword}
-                />
-                <Form.Control.Feedback type="invalid">
-                  {errors.repeatPassword}
-                </Form.Control.Feedback>	
-              </Form.Group>
               <Form.Group className="mb-3" controlId="formRole">
                 <Form.Label>Rol:</Form.Label>
                 <Form.Select aria-label="Default select example" name="role" onChange={handleChange} value={values.role}>

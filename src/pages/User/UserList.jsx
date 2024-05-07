@@ -10,7 +10,10 @@ export default function UserList() {
 	Logger.debug("UserList page")
 
 	const { userService } = useServicesContext()
-
+	const handleCloseModal = () => {
+    setShowModal(false);
+    setUserToDelete(null);
+  };
 	const [users, setUsers] = useState(null)
 	const [showModal, setShowModal] = useState(false)
 	const [userToDelete, setUserToDelete] = useState(null)
@@ -43,15 +46,18 @@ export default function UserList() {
 		setShowModal(true)
 	}
 
-	const handleCloseModal = () => {
-		setShowModal(false)
-		setUserToDelete(null)
-	}
-
-	const handleDeleteUser = () => {
+	const handleDeleteUser = async () => {
 		if (userToDelete) {
-			
-			handleCloseModal();
+			try {
+				await userService.toDelete(userToDelete.id);
+				const updatedUsers = users.filter(user => user.id !== userToDelete.id);
+				setUsers(updatedUsers);
+				handleCloseModal();
+				alert("Usuario eliminado con éxito!");
+			} catch (error) {
+				Logger.error(error.message);
+				alert("ERROR al eliminar usuario");
+			}
 		}
 	}
 

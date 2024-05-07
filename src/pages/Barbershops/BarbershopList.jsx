@@ -64,6 +64,16 @@ export default function BarbershopList() {
     }
   }
 
+  const handleDetailsClick = async (id) => {
+    try {
+      await bsService.getBarbershopById(id);
+      // Realizar acciones adicionales al obtener los detalles de la barbería, si es necesario
+    } catch (error) {
+      Logger.error(error.message);
+      alert("ERROR al obtener detalles de la barbería");
+    }
+  }
+
   return (
     <Layout>
       <section id="barbershops" className="w-75 m-auto">
@@ -103,7 +113,7 @@ export default function BarbershopList() {
                       Dirección: <br/>{barbershop.ubication}
                     </Card.Text>
                     <Link to={`/barbershops/${barbershop.id}`}>
-                      <Button variant="primary">Ver detalles</Button>
+                      <Button variant="primary" onClick={() => handleDetailsClick(barbershop.id)}>Ver detalles</Button>
                     </Link>
                     <Button variant="danger" onClick={() => handleShowModal(barbershop)}>Eliminar</Button>
                   </Card.Body>

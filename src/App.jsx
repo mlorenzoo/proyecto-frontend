@@ -21,6 +21,7 @@ import ListSubscriptions from './pages/Admin/ListSubscriptions'
 import NewPlan from './pages/Gestor/NewPlan'
 import NewBarbershop from './pages/Gestor/NewBarbershop'
 import BarbershopList from './pages/Barbershops/BarbershopList'
+import BarbershopView from './pages/Barbershops/BarbershopView'
 
 function App() {
 
@@ -54,6 +55,7 @@ function App() {
           <Route path="/new-plan" element={<NewPlan />} />
           <Route path="/new-barbershop" element={<NewBarbershop />} />
           <Route path="/barbershops" element={<BarbershopList />} />
+          <Route path="/barbershops/:id" element={<BarbershopView />} />
         </Routes>
       </UserContextProvider>
     </ServicesContextProvider>

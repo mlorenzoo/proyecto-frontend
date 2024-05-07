@@ -14,7 +14,28 @@ export default class BarbershopsService {
       if (json.success) {        
         return json.barbershops
       } else {
-        throw new Error("Unable to login")
+        throw new Error("Unable to get barbershops")
+      }
+    } catch (error) {
+      throw error
+    }
+  }
+
+  async getBarbershopById(id) {
+    try {
+      const url = process.env.API_URL + `/barbershops/${id}`;
+      const resp = await fetch(url, {
+        headers: {
+          "Accept": "application/json"
+        },
+        method: "GET"
+      });
+      const json = await resp.json();
+      console.log(json);
+      if (json.success) {        
+        return json.barbershop
+      } else {
+        throw new Error("Unable to get barbershop")
       }
     } catch (error) {
       throw error
@@ -56,7 +77,7 @@ export default class BarbershopsService {
       const json = await resp.json();
       console.log(json);
       if (json.success) {        
-        
+
       } else {
         throw new Error("Unable to login")
       }

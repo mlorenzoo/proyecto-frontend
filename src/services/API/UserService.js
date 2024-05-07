@@ -66,16 +66,17 @@ export default class UserService {
 		}
 	}
 
-	async doEdit(id, name, surname, email, password, role) {
+	async doEdit(id, name, surname, email, role) {
 		try {
 			console.log(name);
 			const url = process.env.API_URL + `/users/${id}`
 			const resp = await fetch(url, {
 				headers: {
-					"Accept": "application/json"
+					"Accept": "application/json",
+					"Content-Type": "application/json"
 				},
 				method: "PUT",
-				body: JSON.stringify({ name, surname, email, password, role })
+				body: JSON.stringify({ name, surname, email, role })
 			});
 			const json = await resp.json();
 			console.log(json);
@@ -91,7 +92,6 @@ export default class UserService {
 
 	async doDelete(id) {
 		try {
-			console.log(name);
 			const url = process.env.API_URL + `/users/${id}`
 			const resp = await fetch(url, {
 				headers: {

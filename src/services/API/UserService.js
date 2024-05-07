@@ -100,7 +100,7 @@ export default class UserService {
 				method: "DELETE"
 			});
 			const json = await resp.json();
-			console.log(json);
+			console.log(json.success);
 			if (json.success) {				
 				return json.data;
 			} else {

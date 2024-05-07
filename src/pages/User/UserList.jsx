@@ -49,14 +49,15 @@ export default function UserList() {
 
 	const handleDeleteUser = async () => {
 		if (userToDelete) {
+			console.log(userToDelete.id)
 			try {
-				await userService.toDelete(userToDelete.id);
+				await userService.doDelete(userToDelete.id);
 				const updatedUsers = users.filter(user => user.id !== userToDelete.id);
 				setUsers(updatedUsers);
 				handleCloseModal();
 				alert("Usuario eliminado con éxito!");
 			} catch (error) {
-				Logger.error(error.message);
+				console.log(error)
 				alert("ERROR al eliminar usuario");
 			}
 		}

@@ -27,6 +27,7 @@ export default function Profile() {
             }
         })()
     }, [])
+    console.log(profile.pfp);
 
     return (
         <Layout>
@@ -40,7 +41,7 @@ export default function Profile() {
                         <h2 className="mt-4">Correo electónico:</h2>
                         <p>{profile.email}</p>
                         <h2 className="mt-4">Imatge de perfil:</h2>
-                        {profile.pfp && <img src={profile.pfp} alt="Imatge de perfil" />}
+                        <p><img style={{ maxWidth: '200px', maxHeight: '200px' }} src={`http://localhost:8000/storage/${profile.pfp}`} alt="Imatge de perfil" /></p>
                     </>
                     : 
                     <p>Carregant perfil...</p>

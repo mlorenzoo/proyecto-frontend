@@ -27,16 +27,27 @@ const NewBarbershop = () => {
 
     fetchProfile();
   }, [userService, authToken]);
-  console.log(profile)
 
   const onSubmit = async (data) => {
     Logger.debug("Register form submitted");
     console.log(data);
-    console.log(profile)
+
+    const q = data.address;
+    const url = `https://nominatim.openstreetmap.org/search.php?q=${encodeURIComponent(q)}&limit=1&format=jsonv2`;
 
     try {
-      console.log(profile.id)
-      await bsService.addBarbershop(data.barbershopName, data.address, profile.id);
+      const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error('Failed to fetch data from the server');
+      }
+      const jsonData = await response.json();
+      console.log(jsonData);
+
+      const { lat, lon } = jsonData[0];
+      console.log(lat, lon)
+
+      console.log(profile.id);
+      await bsService.addBarbershop(data.barbershopName, data.address, lat, lon, profile.id);
       navigate("/barbershops");
       alert("Barbería añadida correctamente");
     } catch (error) {

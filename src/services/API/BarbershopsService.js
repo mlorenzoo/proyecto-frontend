@@ -42,8 +42,9 @@ export default class BarbershopsService {
     }
   }
 
-  async addBarbershop(name, ubication, gestor_id) {
+  async addBarbershop(name, ubication, lat, lon, gestor_id) {
     try {
+      console.log(lat, lon)
       const url = process.env.API_URL + "/barbershops";
       const resp = await fetch(url, {
         headers: {
@@ -51,12 +52,12 @@ export default class BarbershopsService {
           "Content-Type": "application/json"
         },
         method: "POST",
-        body: JSON.stringify({ name, ubication, gestor_id })
+        body: JSON.stringify({ name, ubication, lat, lon, gestor_id })
       });
       const json = await resp.json();
       console.log(json);
-      if (json) {        
-        //  No hace falta retornar
+      if (json) {
+        
       } else {
         throw new Error("Unable to login")
       }

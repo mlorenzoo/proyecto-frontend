@@ -3,6 +3,8 @@ import Logger from '../../library/Logger'
 import useServicesContext from '../../hooks/useServicesContext'
 import { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
+import 'leaflet/dist/leaflet.css'
 
 export default function BarbershopView() {
 
@@ -36,7 +38,18 @@ export default function BarbershopView() {
 						<br />
 						<h3>Dirección</h3>
 						<p>{barbershop.ubication}</p>
-						{/* Aquí puedes agregar más detalles sobre la barbería si es necesario */}
+						<MapContainer center={[barbershop.lat, barbershop.lon]} zoom={14} style={{ height: "400px", width: "400px" }}>
+							<TileLayer
+								attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+								url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+							/>
+							<Marker position={[barbershop.lat, barbershop.lon]}>
+								<Popup>
+									{barbershop.name}<br />
+									{barbershop.ubication}
+								</Popup>
+							</Marker>
+						</MapContainer>
 					</>
 				) : (
 					<p>Cargando barbería...</p>

@@ -114,7 +114,7 @@ export default function EditarUsuario() {
 							</Form.Group>
               <Form.Group className="mb-3" controlId="formRole">
                 <Form.Label>Rol:</Form.Label>
-                <Form.Select aria-label="Default select example" name="role" onChange={handleChange} value={values.role}>
+                <Form.Select aria-label="Default select example" name="role" onChange={handleChange} value={values.role} defaultValue={profile.role}>
                   <option>---</option>
                   <option value="Admin">Admin</option>
                   <option value="Gestor">Gestor</option>

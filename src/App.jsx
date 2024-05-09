@@ -35,6 +35,8 @@ function App() {
 
   Logger.debug('App root component')
   
+  
+
   return (
     <ServicesContextProvider>
       <UserContextProvider>

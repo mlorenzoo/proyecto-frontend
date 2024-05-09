@@ -127,21 +127,6 @@ export default function Register() {
 								{errors.repeatPassword}
 							</Form.Control.Feedback>	
 						</Form.Group>
-						<Form.Group className="mb-4" controlId="formPfp">
-							<Form.Label>Imatge de perfil</Form.Label>
-							<Form.Control 
-								type="file" 
-								name="pfp" 
-								accept="image/*"
-								onChange={(event) => {
-									setFieldValue("pfp", event.currentTarget.files[0]);
-								}}
-								isInvalid={touched.pfp && !!errors.pfp} 
-							/>
-							<Form.Control.Feedback type="invalid">
-								{errors.pfp}
-							</Form.Control.Feedback>
-						</Form.Group>
 						<Form.Group className="mb-5 check" controlId="formCheckbox">
 							<Form.Check 
 								type="checkbox" 

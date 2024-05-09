@@ -24,7 +24,6 @@ $body-bg: #590aea0a !default;
 }
 
 .justify-content-end{
-  
   margin-right: 1%;
 }
 
@@ -166,4 +165,84 @@ body {
     margin-right: 29%;
     font-size: 18px;
   }
+}
+
+.footer {
+  background-color: #292929;
+  color: white;
+  padding: 15px;
+  text-align: center;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}
+
+.footer-content {
+  display: flex;
+  justify-content: space-between; // Mueve los elementos a los lados
+  align-items: center; // Centra verticalmente los elementos
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.footer-links {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  font-size: 18px;
+}
+
+.footer-links li {
+  display: inline;
+  margin-right: 10px; 
+}
+
+.footer-links li a {
+  color: white;
+  text-decoration: none;
+}
+
+.footer-links li a:hover {
+  text-decoration: underline;
+}
+
+.footer p{
+  font-family: 'Inter', sans-serif;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+svg{
+  margin-right: 10px;
+}
+
+#barbershops{
+  font-family: 'Inter', sans-serif;
+  h2{
+    text-align: center;
+    margin-bottom: 3%;
+    margin-top: 2%;
+    font-size: 36px;
+    font-weight: bold;
+  }
+
+  button{
+    font-size: 18px;
+    margin-top: -2px;
+    font-weight: bold;
+    margin-left: 40px;
+
+  }
+
+  .botones{
+    margin-left: 2%;
+  }
+
+  .buscador {
+    text-align: center;
+    width: 80%;
+    margin-left: 32%;
+  }
+
 }

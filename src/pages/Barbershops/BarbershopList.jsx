@@ -81,7 +81,7 @@ export default function BarbershopList() {
         <Form onSubmit={handleSubmit}>
           <Row>
             <Col>
-              <Form.Group className="mb-3" controlId="formSearch">
+              <Form.Group className="mb-3 buscador" controlId="formSearch">
                 <Form.Control
                   type="text"
                   name="name"
@@ -90,7 +90,7 @@ export default function BarbershopList() {
                 />
               </Form.Group>
             </Col>
-            <Col>
+            <Col className='botones'>
               <Button variant="primary" type="submit">
                 Buscar
               </Button>

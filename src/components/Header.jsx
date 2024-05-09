@@ -84,8 +84,7 @@ export function Header() {
 
 									{profile.role === "Barbero" && (
 										<>
-											<Nav.Link as={Link} to="/products" eventKey={"/products"}>Soy</Nav.Link>
-											<Nav.Link as={Link} to="/users" eventKey={"/users"}>Barbero</Nav.Link>
+											<Nav.Link as={Link} to="/barbershops" eventKey={"/barbershops"}>BARBERÍAS</Nav.Link>
 											<Nav.Link as={Link} to="/profile">{profile.role}</Nav.Link>
 											<Button variant="danger" onClick={handleLogout}>Desconnectar</Button>
 										</>
@@ -93,8 +92,6 @@ export function Header() {
 
 									{profile.role === "Cliente" && (
 										<>
-											<Nav.Link as={Link} to="/products" eventKey={"/products"}>Soy</Nav.Link>
-											<Nav.Link as={Link} to="/users" eventKey={"/users"}>Cliente</Nav.Link>
 											<Nav.Link as={Link} to="/profile">{profile.role}</Nav.Link>
 											<Button variant="danger" onClick={handleLogout}>Desconnectar</Button>
 										</>

@@ -86,6 +86,73 @@ export default class BarbershopsService {
       throw error
     }
   }
+
+  async getBarbers() {
+    try {
+      const url = process.env.API_URL + `/barbers`;
+      const resp = await fetch(url, {
+        headers: {
+          "Accept": "application/json"
+        },
+        method: "GET"
+      });
+      const json = await resp.json();
+      console.log(json);
+      if (json) {        
+        return(json)
+      } else {
+        throw new Error("Unable to login")
+      }
+    } catch (error) {
+      throw error
+    }
+  }
+
+  async quitBarber(barberId) {
+    try {
+      const url = process.env.API_URL + `/barbers/${barberId}`;
+      const resp = await fetch(url, {
+        headers: {
+          "Accept": "application/json",
+          "Content-Type": "application/json"
+        },
+        method: "PUT",
+        body: JSON.stringify({ barbershop_id: null })
+      });
+      const json = await resp.json();
+      console.log(json);
+      if (json.success) {
+        
+      } else {
+        throw new Error("Unable to login")
+      }
+    } catch (error) {
+      throw error
+    }
+  }
+
+  async addBarberToBarbershop(barberId, barbershopId) {
+    try {
+      const url = process.env.API_URL + `/barbers/${barberId}`;
+      const resp = await fetch(url, {
+        headers: {
+          "Accept": "application/json",
+          "Content-Type": "application/json"
+        },
+        method: "PUT",
+        body: JSON.stringify({ barbershop_id: barbershopId })
+      });
+      const json = await resp.json();
+      console.log(json);
+      if (json.success) {
+        
+      } else {
+        throw new Error("Unable to login")
+      }
+    } catch (error) {
+      throw error
+    }
+  }
   // async doRegister(name, surname, email, password) {
   //   try {
   //     const url = process.env.API_URL + "/register"; // Suponiendo que la ruta correcta para el registro es '/register'

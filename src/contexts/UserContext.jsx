@@ -14,9 +14,10 @@ export const UserContextProvider = ({ children }) => {
   // State
   const [authToken, setAuthToken] = useState(data.authToken || null)
   const [user, setUser] = useState(data.user || null)
-  
+  const [profile, setProfile] = useState(data.user || null)
+
   return (
-    <UserContext.Provider value={{ authToken, setAuthToken, user, setUser }}>
+    <UserContext.Provider value={{ authToken, setAuthToken, user, setUser, profile, setProfile }}>
       {children}
     </UserContext.Provider>
   )

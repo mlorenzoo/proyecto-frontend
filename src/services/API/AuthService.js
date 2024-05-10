@@ -48,7 +48,7 @@ export default class AuthService {
 
   async doRegisterRole(name, surname, email, password, role) {
     try {
-      const url = process.env.API_URL + "/register";
+      const url = process.env.API_URL + "/users";
       const resp = await fetch(url, {
         headers: {
           "Accept": "application/json",

@@ -246,3 +246,62 @@ svg{
   }
 
 }
+
+#newuser{
+  font-family: 'Inter', sans-serif;
+  h2{
+    text-align: center;
+    margin-bottom: 3%;
+    margin-top: 4%;
+    font-size: 36px;
+    font-weight: bold;
+  }
+  button{
+    font-size: 18px;
+    margin-top: 10px;
+    font-weight: bold;
+  }
+
+  form {
+    font-weight: bold;
+    font-size: 18px;
+  }
+
+  label{
+    margin-top: 1%;
+  }
+
+}
+
+#subscriptions{
+  font-family: 'Inter', sans-serif;
+
+  h1 {
+    text-align: center;
+    margin-bottom: 80px;
+    margin-top: 40px;
+    font-size: 36px;
+    font-weight: bold;
+  }
+  h2{
+    text-align: center;
+    margin-bottom: 3%;
+    margin-top: 15%;
+    font-size: 24px;
+    font-weight: bold;
+    margin-right: 100%;
+  }
+  p{
+    text-align: center;
+    font-size: 18px;
+    margin-bottom: 100px;
+  }
+  button{
+    font-size: 18px;
+    font-weight: bold;
+    margin-left: 15px;
+  }
+  .plan{
+    margin-top: 11%;
+  }
+}

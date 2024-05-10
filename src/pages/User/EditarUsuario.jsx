@@ -66,7 +66,7 @@ export default function EditarUsuario() {
 			if (data.password !== '' && data.password !== profile.password) {
 				editedData.password = data.password;
 			}
-			if (data.pfp !== '' && data.pfp !== profile.pfp) {
+			if (data.pfp instanceof File) {
 				editedData.pfp = data.pfp;
 			}
 			await userService.doEdit(profile.id, editedData, authToken);
@@ -88,11 +88,7 @@ export default function EditarUsuario() {
         address: Yup.string().nullable(),
         phone: Yup.string().matches(/^\d{9}$/, 'Introduce un número de teléfono válido de 9 dígitos').nullable(),
         password: Yup.string().min(8, 'La contraseña debe tener al menos 8 caracteres'),
-		pfp: Yup.mixed().notRequired().test(
-			'fileFormat',
-			'Solo se admiten archivos de imagen (jpeg, jpg, png, gif)',
-			value => !value || (value instanceof File && ['image/jpeg', 'image/png', 'image/gif'].includes(value.type))
-		),		
+		pfp: Yup.mixed().nullable(),
     });
   
 
@@ -213,15 +209,13 @@ export default function EditarUsuario() {
 				<Form.Group className="mb-3" controlId="formPFP">
 					<Form.Label>Foto de perfil</Form.Label>
 					<Form.Control
-					value={values.pfp}
-					type="file"
-					name="pfp"
-					placeholder="Introduce tu foto de perfil"
-					onChange={handleChange}
-					isInvalid={!!errors.pfp}
+						type="file"
+						name="pfp"
+						onChange={(event) => handleChange(event) && setFieldValue("pfp", event.currentTarget.files[0])}
+						isInvalid={!!errors.pfp}
 					/>
 					<Form.Control.Feedback type="invalid">
-					{errors.pfp}
+						{errors.pfp}
 					</Form.Control.Feedback>
 				</Form.Group>
 				<Form.Group className="mb-3" controlId="formPhone">

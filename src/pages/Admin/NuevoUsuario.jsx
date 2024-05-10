@@ -39,7 +39,7 @@ export default function NuevoUsuario() {
 
 	return (
 		<Layout>
-			<section id="login" className="w-75 m-auto">
+			<section id="newuser" className="w-75 m-auto">
 				<h2>Nuevo usuario</h2>
 				<Formik
 					validationSchema={schema}

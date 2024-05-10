@@ -34,7 +34,6 @@ export default class UserService {
 			const json = await resp.json();
 			console.log(json)
 			if (json.success) {
-				console.log(json.data)
 				return json.data;
 			} else {
 				throw new Error("Unable to get user ")

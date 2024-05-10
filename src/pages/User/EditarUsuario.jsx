@@ -11,204 +11,240 @@ import { useEffect, useState } from 'react'
 
 export default function EditarUsuario() {
 	const { id } = useParams();
-	console.log(id);
 	const navigate = useNavigate()
-	
+
 	const { authService, userService } = useServicesContext()
-  	const [ profile, setProfile ] = useState({})
-	console.log(profile.id)
+	const [ profile, setProfile ] = useState({})
+	const [ user, setUser ] = useState({})
+	const { authToken, setAuthToken } = useUserContext()
+
+
 
 	useEffect(() => {
 		(async () => {
 			// Auth 
 			try {
-				const data = await userService.getOneById(id)
-				setProfile(data)
-				return data
-				} catch (error) {
-					Logger.error(error.message)
-					alert("Lolo")
-				}
+			const data = await userService.getOneById(id)
+			const data2 = await userService.getOne(authToken)
+			setProfile(data)
+			setUser(data2.user)
+			return (data, data2)
+			} catch (error) {
+			Logger.error(error.message)
+			alert("Lolo")
+			}
 		})()
 	}, [])
+	console.log(profile, user)
 
 	async function onSubmit(data) {
-		Logger.debug("Register form submitted")
-		console.log(data)
-		// Auth 
+		Logger.debug("Formulario de edición enviado");
+		// Auth
 		try {
-      	console.log(data.name);
-		await userService.doEdit(profile.id, data.name, data.surname, data.email, data.role)
-		alert("Usuario editado con éxito!")
-		navigate("/users")
+			const editedData = {};
+			
+			// Agregar solo los campos modificados al objeto editedData
+			if (data.name !== '' && data.name !== profile.name) {
+				editedData.name = data.name;
+			}
+			if (data.surname !== '' && data.surname !== profile.surname) {
+				editedData.surname = data.surname;
+			}
+
+			if (data.email !== '' && data.email !== profile.email) {
+				editedData.email = data.email;
+			}
+			if (data.role !== '' && data.role !== profile.role) {
+				editedData.role = data.role;
+			}
+			if (data.address !== '' && data.address !== profile.address) {
+				editedData.address = data.address;
+			}
+			if (data.phone !== '' && data.phone !== profile.phone) {
+				editedData.phone = data.phone;
+			}
+			if (data.password !== '' && data.password !== profile.password) {
+				editedData.password = data.password;
+			}
+			if (data.pfp !== '' && data.pfp !== profile.pfp) {
+				editedData.pfp = data.pfp;
+			}
+			await userService.doEdit(profile.id, editedData, authToken);
+			alert("Usuario editado con éxito!");
+			navigate("/users");
 		} catch (error) {
-			Logger.error(error.message)
-			alert("ERROR(")
+			Logger.error(error.message);
+			alert("ERROR");
 		}
 	}
-
-	const schema = Yup.object().shape({
-		name: Yup.string().required('Aquest camp és obligatori'),
-		surname: Yup.string().required('Aquest camp és obligatori'),
-		email: Yup.string().email('Introdueix una adreça de correu vàlida').required('Aquest camp és obligatori'),
-		role: Yup.string().notOneOf(['---'], 'Selecciona un rol').required('Selecciona un rol'),
-		pfp: Yup.mixed().required('Es necesario subir una imagen').test(
-		  'fileFormat',
-		  'Sólo se admiten archivos de imagen (jpeg, jpg, png, gif)',
-		  value => value && ['image/jpeg', 'image/png', 'image/gif'].includes(value.type)
-		),
-		address: Yup.string().nullable(),
-		phone: Yup.string().matches(/^[0-9]{10}$/, 'Introduce un número de teléfono válido').nullable(),
-		password: Yup.string().min(8, 'La contraseña debe tener al menos 8 caracteres').required('Este campo es obligatorio'),
-		});
+	
 	
 
-	return (
+    const schema = Yup.object().shape({
+        name: Yup.string(),
+        surname: Yup.string(),
+        email: Yup.string().email('Introdueix una adreça de correu vàlida'),
+        role: Yup.string().notOneOf(['---'], 'Selecciona un rol'),
+        address: Yup.string().nullable(),
+        phone: Yup.string().matches(/^\d{9}$/, 'Introduce un número de teléfono válido de 9 dígitos').nullable(),
+        password: Yup.string().min(8, 'La contraseña debe tener al menos 8 caracteres'),
+		pfp: Yup.mixed().notRequired().test(
+			'fileFormat',
+			'Solo se admiten archivos de imagen (jpeg, jpg, png, gif)',
+			value => !value || (value instanceof File && ['image/jpeg', 'image/png', 'image/gif'].includes(value.type))
+		),		
+    });
+  
+
+  	return (
 		<Layout>
 			<section id="login" className="w-75 m-auto">
-				<h2>Editar usuario "{profile.name}"</h2>
-				<Formik
-					validationSchema={schema}
-					onSubmit={onSubmit}
-					initialValues={{
-					name: profile.name,
-					surname: profile.surname,
-					email: profile.email,
-					role: profile.role,
-					pfp: profile.pfp || '',
-					address: profile.address || '',
-					phone: profile.phone || '',
-					password: '',
-					remember: false,
-				}}
-				>
-				{({ handleSubmit, handleChange, values, touched, errors }) => (
-				<Form noValidate onSubmit={handleSubmit}>
-              		<Form.Group className="mb-3" controlId="formName">
-						<Form.Label>Nombre</Form.Label>
-						<Form.Control 
-						defaultValue={profile.name}
-						type="text" 
-						name="name" 
-						placeholder="Introduce nombre de usuario/a" 
+			<h2>Editar usuario "{profile.name}"</h2>
+			<Formik
+                    validationSchema={schema}
+                    onSubmit={onSubmit}
+                    initialValues={{
+                        name: profile.name || '',
+                        surname: profile.surname || '',
+                        email: profile.email || '',
+                        role: profile.role || '',
+                        address: profile.address || '',
+                        phone: profile.phone || '',
+                        password: '',
+                        pfp: profile.pfp || '',
+                        remember: false,
+                    }}
+                >
+        	{({ handleSubmit, handleChange, values, touched, errors }) => (        	
+			<Form noValidate onSubmit={handleSubmit}>
+                <Form.Group className="mb-3" controlId="formName">
+            		<Form.Label>Nombre</Form.Label>
+					<Form.Control 
+    				value={values.name}
+					type="text" 
+					name="name" 
+					placeholder="Introduce nombre de usuario/a" 
+					onChange={handleChange}
+					isInvalid={!!errors.name} 
+					/>
+					<Form.Control.Feedback type="invalid">
+					{errors.name}
+					</Form.Control.Feedback>
+          		</Form.Group>
+          		<Form.Group className="mb-3" controlId="formSurname">
+					<Form.Label>Apellido</Form.Label>
+					<Form.Control 
+					value={values.surname}
+					type="text" 
+					name="surname" 
+					placeholder="Introduce apellido" 
+					onChange={handleChange}
+					isInvalid={!!errors.surname} 
+					/>
+					<Form.Control.Feedback type="invalid">
+					{errors.surname}
+					</Form.Control.Feedback>
+				</Form.Group>
+          		<Form.Group className="mb-3" controlId="formEmail">
+					<Form.Label>Correo electrónico</Form.Label>
+					<Form.Control
+					value={values.email}
+					type="email"
+					name="email"
+					placeholder="Introduce correo electrónico"
+					onChange={handleChange}
+					isInvalid={!!errors.email}
+					/>
+					<Form.Control.Feedback type="invalid">
+					{errors.email}
+					</Form.Control.Feedback>
+				</Form.Group>
+		  		{user.id === profile.id && (
+          		<Form.Group className="mb-3" controlId="formPassword">
+					<Form.Label>Contraseña</Form.Label>
+
+					<Form.Control 
+						value={values.password}
+						type="password" 
+						name="password" 
+						placeholder="Contraseña" 
 						onChange={handleChange}
-						isInvalid={!!errors.name} 
-						/>
-						<Form.Control.Feedback type="invalid">
-						{errors.name}
-						</Form.Control.Feedback>
-					</Form.Group>
-					<Form.Group className="mb-3" controlId="formSurname">
-						<Form.Label>Apellido</Form.Label>
-						<Form.Control 
-						defaultValue={profile.surname}
-						type="text" 
-						name="surname" 
-						placeholder="Introduce apellido" 
-						onChange={handleChange}
-						isInvalid={!!errors.surname} 
-						/>
-						<Form.Control.Feedback type="invalid">
-						{errors.surname}
-						</Form.Control.Feedback>
-					</Form.Group>
-					<Form.Group className="mb-3" controlId="formEmail">
-						<Form.Label>Correo electrónico</Form.Label>
-						<Form.Control
-                  		defaultValue={profile.email}
-						type="email"
-						name="email"
-						placeholder="Introduce correo electrónico"
-						onChange={handleChange}
-						isInvalid={!!errors.email}
-						/>
-						<Form.Control.Feedback type="invalid">
-						{errors.email}
-						</Form.Control.Feedback>
-					</Form.Group>
-					<Form.Group className="mb-3" controlId="formPassword">
-						<Form.Label>Contraseña</Form.Label>
-						<Form.Control 
-							defaultValue={profile.password}
-							type="password" 
-							name="password" 
-							placeholder="Contraseña" 
-							onChange={handleChange}
-							isInvalid={!!errors.password} 
-						/>
-						<Form.Control.Feedback type="invalid">
-							{errors.password}
-						</Form.Control.Feedback>
-					</Form.Group>
-					<Form.Group className="mb-3" controlId="formRole">
-						{profile.role === "Admin" && ( // Mostrar el campo solo si el rol es Admin
-							<>
-							<Form.Label>Rol:</Form.Label>
-							<Form.Select 
-								aria-label="Default select example" 
-								name="role" 
-								onChange={handleChange} 
-								value={values.role} 
-								defaultValue={profile.role}
-							>
-								<option>---</option>
-								<option value="Admin">Admin</option>
-								<option value="Gestor">Gestor</option>
-								<option value="Barbero">Barbero</option>
-								<option value="Cliente">Cliente</option>
-							</Form.Select>
-							</>
-						)}
-					</Form.Group>
-					<Form.Group className="mb-3" controlId="formAddress">
-						<Form.Label>Dirección</Form.Label>
-						<Form.Control
-                  		defaultValue={profile.address}
-						type="text"
-						name="address"
-						placeholder="Introduce tu durección"
-						onChange={handleChange}
-						isInvalid={!!errors.address}
-						/>
-						<Form.Control.Feedback type="invalid">
-						{errors.address}
-						</Form.Control.Feedback>
-					</Form.Group>
-					<Form.Group className="mb-3" controlId="formPFP">
-						<Form.Label>Foto de perfil</Form.Label>
-						<Form.Control
-                  		defaultValue={profile.pfp}
-						type="file"
-						name="pfp"
-						placeholder="Introduce tu foto de perfil"
-						onChange={handleChange}
-						isInvalid={!!errors.pfp}
-						/>
-						<Form.Control.Feedback type="invalid">
-						{errors.phone}
-						</Form.Control.Feedback>
-					</Form.Group>
-					<Form.Group className="mb-3" controlId="formPhone">
-						<Form.Label>Dirección</Form.Label>
-						<Form.Control
-                  		defaultValue={profile.phone}
-						type="text"
-						name="phone"
-						placeholder="Introduce tu número de teléfono"
-						onChange={handleChange}
-						isInvalid={!!errors.phone}
-						/>
-						<Form.Control.Feedback type="invalid">
-						{errors.phone}
-						</Form.Control.Feedback>
-					</Form.Group>
-					<Button variant="primary" type="submit">
-						EDITAR USUARIO
-					</Button>
-				</Form>
+						isInvalid={!!errors.password}
+					/>
+
+					<Form.Control.Feedback type="invalid">
+					{errors.password}
+					</Form.Control.Feedback>
+          		</Form.Group>
 				)}
-				</Formik>
-			</section>
-		</Layout>
-	)
+				<Form.Group className="mb-3" controlId="formRole">
+					{user.role === "Admin" && (
+					<>
+					<Form.Label>Rol:</Form.Label>
+					<Form.Select 
+						aria-label="Default select example" 
+						name="role" 
+						onChange={handleChange} 
+						value={values.role || profile.role} 
+					>
+						<option>---</option>
+						<option value="Admin">Admin</option>
+						<option value="Gestor">Gestor</option>
+						<option value="Barbero">Barbero</option>
+						<option value="Cliente">Cliente</option>
+					</Form.Select>
+					</>
+					)}
+				</Form.Group>
+				<Form.Group className="mb-3" controlId="formAddress">
+					<Form.Label>Dirección</Form.Label>
+					<Form.Control
+					value={values.address}
+					type="text"
+					name="address"
+					placeholder="Introduce tu durección"
+					onChange={handleChange}
+					isInvalid={!!errors.address}
+					/>
+					<Form.Control.Feedback type="invalid">
+					{errors.address}
+					</Form.Control.Feedback>
+				</Form.Group>
+				<Form.Group className="mb-3" controlId="formPFP">
+					<Form.Label>Foto de perfil</Form.Label>
+					<Form.Control
+					value={values.pfp}
+					type="file"
+					name="pfp"
+					placeholder="Introduce tu foto de perfil"
+					onChange={handleChange}
+					isInvalid={!!errors.pfp}
+					/>
+					<Form.Control.Feedback type="invalid">
+					{errors.pfp}
+					</Form.Control.Feedback>
+				</Form.Group>
+				<Form.Group className="mb-3" controlId="formPhone">
+					<Form.Label>Teléfono</Form.Label>
+					<Form.Control
+					value={values.phone}
+					type="text"
+					name="phone"
+					placeholder="Introduce tu número de teléfono"
+					onChange={handleChange}
+					isInvalid={!!errors.phone}
+					/>
+					<Form.Control.Feedback type="invalid">
+					{errors.phone}
+					</Form.Control.Feedback>
+				</Form.Group>
+				<Button variant="primary" type="submit">
+					EDITAR USUARIO
+				</Button>
+        	</Form>
+        	)}
+        </Formik>
+      </section>
+    </Layout>
+  )
 }

@@ -7,12 +7,31 @@ import useServicesContext from '../../hooks/useServicesContext'
 
 import { Formik } from 'formik'
 import * as Yup from 'yup'
+import { useContext, useEffect, useState } from 'react'
+import UserContext from '../../contexts/UserContext'
 
 export default function NuevoUsuario() {
 
 	const navigate = useNavigate()
-	
+	const [ profile, setProfile ] = useState({})
 	const { authService } = useServicesContext()
+	const { authToken } = useContext(UserContext)
+	console.log(authToken)
+
+	useEffect(() => {
+		(async () => {
+			// Auth 
+			try {
+				const data = await userService.getOne(authToken)
+				console.log(data);
+				setProfile(data.user)
+				return data
+			} catch (error) {
+				Logger.error(error.message)
+			}
+		})()
+	}, [])
+	console.log(profile)
 
 	async function onSubmit(data) {
 		Logger.debug("Register form submitted")

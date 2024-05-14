@@ -1,10 +1,11 @@
 import Layout from '../../components/Layout'
 import Logger from '../../library/Logger'
 import useServicesContext from '../../hooks/useServicesContext'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useContext } from 'react'
 import { Button, Form, Row, Col, Table, Modal } from 'react-bootstrap'
 import { Link, useSearchParams } from 'react-router-dom' 
-
+import UserContext from '../../contexts/UserContext'
+import { useNavigate } from 'react-router-dom'
 
 export default function UserList() {
 
@@ -16,8 +17,11 @@ export default function UserList() {
     setUserToDelete(null);
   };
 	const [users, setUsers] = useState(null)
+	const [ profile, setProfile ] = useState({})
 	const [showModal, setShowModal] = useState(false)
 	const [userToDelete, setUserToDelete] = useState(null)
+	const { authToken } = useContext(UserContext)
+	const navigate = useNavigate()
 
 	const [queryParams, setQueryParams] = useSearchParams();
 
@@ -27,6 +31,12 @@ export default function UserList() {
 				const data = await userService.getAll()
 				console.log(data);
 				setUsers(data)
+
+				const userData = await userService.getOne(authToken)
+				setProfile(userData.user)
+				if (userData.user.role !== 'Admin') {
+					navigate('/unauthorized');
+				}
 				return data
 			} catch (error) {
 				Logger.error(error.message)

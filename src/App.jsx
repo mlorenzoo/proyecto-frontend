@@ -22,6 +22,8 @@ import NewPlan from './pages/Gestor/NewPlan'
 import NewBarbershop from './pages/Gestor/NewBarbershop'
 import BarbershopList from './pages/Barbershops/BarbershopList'
 import BarbershopView from './pages/Barbershops/BarbershopView'
+import PayPalButton from './PayPalButton'
+import Unauthorized from './pages/Unauthorized'
 
 function App() {
 
@@ -46,8 +48,6 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/profile" element={<Profile />} />
-          <Route path="/products" element={<ProductList />} />
-          <Route path="/products/:id" element={<ProductView />} />
           <Route path="/users" element={<UserList />} />
           <Route path="/users/:id" element={<UserView />} />
           <Route path="/nuevo-usuario" element={<NuevoUsuario />} />
@@ -58,6 +58,8 @@ function App() {
           <Route path="/new-barbershop" element={<NewBarbershop />} />
           <Route path="/barbershops" element={<BarbershopList />} />
           <Route path="/barbershops/:id" element={<BarbershopView />} />
+          <Route path="/unauthorized" element={<Unauthorized />} />
+          <Route element={<PayPalButton />} />
         </Routes>
       </UserContextProvider>
     </ServicesContextProvider>

@@ -1,19 +1,23 @@
 import Layout from '../../components/Layout'
 import Logger from '../../library/Logger'
 import useServicesContext from '../../hooks/useServicesContext'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useContext } from 'react'
 import { Button, Form, Row, Col, Card, Modal } from 'react-bootstrap'
 import { Link, useSearchParams } from 'react-router-dom'
+import UserContext from '../../contexts/UserContext'
 
 export default function BarbershopList() {
 
   Logger.debug("BarbershopList page")
 
-  const { bsService } = useServicesContext()
+  const { bsService, userService } = useServicesContext()
 
   const [barbershops, setBarbershops] = useState(null)
+  const [profile, setProfile] = useState(null)
   const [showModal, setShowModal] = useState(false)
   const [barbershopToDelete, setBarbershopToDelete] = useState(null)
+  const { authToken } = useContext(UserContext)
+  console.log(authToken)
 
   const [queryParams, setQueryParams] = useSearchParams();
 
@@ -23,6 +27,10 @@ export default function BarbershopList() {
         const data = await bsService.getBarbershop()
         console.log(data);
         setBarbershops(data)
+
+        const userData = await userService.getOne(authToken)
+        console.log(userData);
+        setProfile(userData.user)
         return data
       } catch (error) {
         Logger.error(error.message)
@@ -30,6 +38,7 @@ export default function BarbershopList() {
       }
     })()
   }, [queryParams])
+  console.log(profile)
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -94,11 +103,13 @@ export default function BarbershopList() {
               <Button variant="primary" type="submit">
                 Buscar
               </Button>
-              <Link to="/new-barbershop">
-                <Button variant="success">
-                  Añadir barbería
-                </Button>
-              </Link>
+              {profile && profile.role === "Gestor" && (
+                <Link to="/new-barbershop">
+                  <Button variant="success">
+                    Añadir barbería
+                  </Button>
+                </Link>
+              )}
             </Col>
           </Row>
         </Form>

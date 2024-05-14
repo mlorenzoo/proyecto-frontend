@@ -1,12 +1,18 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Button } from 'react-bootstrap';
 import Layout from '../../components/Layout';
 import Logger from '../../library/Logger';
 import useServicesContext from '../../hooks/useServicesContext';
+import PayPalButton from "../../PayPalButton";
+import UserContext from "../../contexts/UserContext";
 
 const Pricing = () => {
-  const { subsService } = useServicesContext();
+  const { subsService, userService } = useServicesContext();
   const [subscriptions, setSubscriptions] = useState([]);
+  const [profile, setProfile] = useState([]);
+  const { authToken } = useContext(UserContext);
+  const { user } = useContext(UserContext);
+  console.log(authToken);
 
   useEffect(() => {
     (async () => {
@@ -14,7 +20,9 @@ const Pricing = () => {
       try {
         const data = await subsService.getSubs();
         setSubscriptions(data);
-        console.log(data);
+        const dataUser = await userService.getOne(authToken)
+				console.log(dataUser);
+				setProfile(dataUser.user)
       } catch (error) {
         Logger.error(error.message);
       }
@@ -24,6 +32,12 @@ const Pricing = () => {
   const handleSubscriptionSelect = (subscription) => {
     // Handle subscription selection logic here
     console.log("Selected subscription:", subscription);
+  };
+
+  const handleOrderCapture = (orderData) => {
+    // Aquí puedes hacer lo que necesites con la información de la orden
+    console.log("Orden capturada:", orderData);
+    // Por ejemplo, puedes establecer un estado con la información de la orden
   };
 
   return (
@@ -46,18 +60,13 @@ const Pricing = () => {
                 </div>
                 <div className="card-body">
                   <h1 className="card-title pricing-card-title">
-                    {`€${subscription.price}`}
+                    {`${subscription.price}$`}
                     <small className="text-muted">
                       / {subscription.duration}
                     </small>
                   </h1>
                   <p>{subscription.description}</p>
-                  <Button
-                    variant="primary"
-                    onClick={() => handleSubscriptionSelect(subscription)}
-                  >
-                    Select
-                  </Button>
+                  <PayPalButton totalValue={subscription.price} invoice={subscription.plan}/>
                 </div>
               </div>
             </div>

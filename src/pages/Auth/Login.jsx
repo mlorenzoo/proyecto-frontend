@@ -13,7 +13,7 @@ export default function Login() {
 
 	const navigate = useNavigate()
 	const { setAuthToken, setUser } = useUserContext()
-	const { authService, lSessionService, sSessionService } = useServicesContext()
+	const { authService, lSessionService, sSessionService, userService } = useServicesContext()
 
 	async function onSubmit(data) {
 		Logger.debug("Login form submitted")
@@ -21,16 +21,19 @@ export default function Login() {
 		// Auth 
 		try {
 			const authToken = await authService.doLogin(data.email, data.password)
-			console.log(authToken)
-			console.log(data)
+			console.log(authToken);
 			if (authToken) {
 				const user = { "email": data.email, "remember": data.remember }
 				// Session			
 				const sessionService = user.remember ? lSessionService : sSessionService
 				sessionService.createSession({ authToken, user })
+
+				const userData = await userService.getOne(authToken);
+				console.log(userData.user);
+
 				// State
 				setAuthToken(authToken)
-				setUser(user)
+				setUser(userData.user)
 				// Redirect
 				navigate("/")
 				alert("Inici de sessió OK!")

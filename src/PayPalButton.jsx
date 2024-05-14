@@ -1,7 +1,10 @@
-import React from "react";
+import React, { useContext } from "react";
 import { PayPalButtons } from "@paypal/react-paypal-js";
+import UserContext from "./contexts/UserContext";
 
 const PayPalButton = (props) => {
+  const { user } = useContext(UserContext)
+  console.log(user)
   return (
     <PayPalButtons 
       createOrder={(data, actions) => {

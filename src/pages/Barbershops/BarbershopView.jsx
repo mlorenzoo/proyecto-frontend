@@ -6,8 +6,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
-import { Button } from 'react-bootstrap';
-import Table from 'react-bootstrap/Table';
+import { Button, Table } from 'react-bootstrap';
 import UserContext from '../../contexts/UserContext';
 
 export default function BarbershopView() {

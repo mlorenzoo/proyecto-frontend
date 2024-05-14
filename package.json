@@ -1,5 +1,5 @@
 {
-  "name": "wannapop",
+  "name": "barbershops",
   "private": true,
   "version": "0.1.0",
   "type": "module",
@@ -18,7 +18,6 @@
     "idb": "^8.0.0",
     "react": "^18.2.0",
     "react-bootstrap": "^2.10.2",
-    "react-bootstrap-date-picker": "^5.1.0",
     "react-dom": "^18.2.0",
     "react-leaflet": "^4.2.1",
     "react-places-autocomplete": "^7.3.0",

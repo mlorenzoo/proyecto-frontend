@@ -65,27 +65,36 @@ export default class UserService {
 		}
 	}
 
-	async doEdit(id, name, surname, email, role) {
+	async doEdit(id, data, authToken) {
 		try {
-			console.log(name);
-			const url = process.env.API_URL + `/users/${id}`
+			const url = process.env.API_URL + `/users/${id}`;
+			// Comprobar si algún campo en data está vacío o no definido
+			const isDataEmpty = Object.keys(data).some(key => data[key] === '' || data[key] === undefined);
+			let requestBody;
+			// Si data está vacío, enviar una solicitud vacía (sin cuerpo)
+			if (isDataEmpty) {
+				requestBody = {};
+			} else {
+				requestBody = data;
+			}
 			const resp = await fetch(url, {
 				headers: {
 					"Accept": "application/json",
-					"Content-Type": "application/json"
+					"Content-Type": "application/json",
+					"Authorization": `Bearer ${authToken}`
 				},
 				method: "PUT",
-				body: JSON.stringify({ name, surname, email, role })
+				body: JSON.stringify(requestBody) // Pasar requestBody directamente como cuerpo de la solicitud
 			});
 			const json = await resp.json();
 			console.log(json);
-			if (json.success) {				
+			if (json.success) {                
 				return json.data;
 			} else {
-				throw new Error("Unable to get all users")
+				throw new Error("No se pudo editar el usuario");
 			}
 		} catch (error) {
-			throw error
+			throw error;
 		}
 	}
 

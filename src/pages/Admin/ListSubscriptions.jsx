@@ -64,7 +64,7 @@ const ListSubscriptions = () => {
           </div>
           <div className="col-md-4 text-end">
             <Link to="/new-plan">
-              <Button variant="primary">Nuevo plan</Button>
+              <Button variant="primary" className="plan">Nuevo plan</Button>
             </Link>
           </div>
         </div>

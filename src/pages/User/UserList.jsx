@@ -43,7 +43,13 @@ export default function UserList() {
 				alert("ERROR carregant llistat... :-(")
 			}
 		})()
-	}, [queryParams])
+	}, [queryParams, authToken, navigate])
+
+	useEffect(() => {
+		if (!authToken) {
+			navigate('/unauthorized');
+		}
+	}, [authToken, navigate]);
 
 	const handleSubmit = (event) => {
 		event.preventDefault();

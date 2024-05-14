@@ -1,17 +1,26 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Button, Table, Modal } from 'react-bootstrap';
 import Layout from '../../components/Layout';
 import Logger from '../../library/Logger';
 import useServicesContext from '../../hooks/useServicesContext';
 import { Link } from 'react-router-dom';
+import UserContext from "../../contexts/UserContext";
+import { useNavigate } from "react-router-dom";
 
 const ListSubscriptions = () => {
   const { subsService } = useServicesContext();
   const [subscriptions, setSubscriptions] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [subscriptionToDelete, setSubscriptionToDelete] = useState(null);
+  const { user, profile } = useContext(UserContext);
+  const navigate = useNavigate();
+
 
   useEffect(() => {
+    if (!profile || profile.role !== "Admin") {
+      navigate('/unauthorized');
+    }
+
     (async () => {
       try {
         const data = await subsService.getSubs();
@@ -22,6 +31,7 @@ const ListSubscriptions = () => {
       }
     })();
   }, []);
+  console.log(user)
 
   const handleSubscriptionSelect = (subscription) => {
     // Handle subscription selection logic here

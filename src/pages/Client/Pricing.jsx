@@ -5,14 +5,14 @@ import Logger from '../../library/Logger';
 import useServicesContext from '../../hooks/useServicesContext';
 import PayPalButton from "../../PayPalButton";
 import UserContext from "../../contexts/UserContext";
+import { useNavigate } from 'react-router-dom'
+
 
 const Pricing = () => {
   const { subsService, userService } = useServicesContext();
   const [subscriptions, setSubscriptions] = useState([]);
-  const [profile, setProfile] = useState([]);
-  const { authToken } = useContext(UserContext);
-  const { user } = useContext(UserContext);
-  console.log(authToken);
+  const { authToken, user, profile } = useContext(UserContext);
+  const navigate = useNavigate()
 
   useEffect(() => {
     (async () => {
@@ -20,14 +20,20 @@ const Pricing = () => {
       try {
         const data = await subsService.getSubs();
         setSubscriptions(data);
-        const dataUser = await userService.getOne(authToken)
-				console.log(dataUser);
-				setProfile(dataUser.user)
+        if (profile.role !== 'Cliente') {
+					navigate('/unauthorized');
+				}
       } catch (error) {
         Logger.error(error.message);
       }
     })();
-  }, []);
+  }, [ navigate ]);
+
+  useEffect(() => {
+		if (!user) {
+			navigate('/unauthorized');
+		}
+	}, [authToken, navigate]);
 
   const handleSubscriptionSelect = (subscription) => {
     // Handle subscription selection logic here

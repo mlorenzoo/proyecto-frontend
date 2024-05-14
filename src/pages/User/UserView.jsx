@@ -1,8 +1,12 @@
 import Layout from '../../components/Layout'
 import Logger from '../../library/Logger'
 import useServicesContext from '../../hooks/useServicesContext'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useContext } from 'react'
 import { useParams } from 'react-router-dom'
+import UserContext from '../../contexts/UserContext'
+import { useNavigate } from 'react-router-dom'
+
+
 
 export default function UserView() {
 
@@ -12,6 +16,12 @@ export default function UserView() {
 
 	const { userService } = useServicesContext()
 
+	const { authToken } = useContext(UserContext)
+
+	const navigate = useNavigate()
+
+	const [ profile, setProfile ] = useState({})
+
 	const [user, setUser] = useState(null)
 
 	useEffect(() => {
@@ -19,13 +29,24 @@ export default function UserView() {
 			try {
 				const data = await userService.getOneById(id)
 				setUser(data)
+				const userData = await userService.getOne(authToken)
+				setProfile(userData.user)
+				if (userData.user.role !== 'Admin') {
+					navigate('/unauthorized');
+				}
 				return data
 			} catch (error) {
 				Logger.error(error.message)
 				alert("ERROR carregant usuari/a... :-(")
 			}
 		})()
-	}, [id])
+	}, [id, authToken])
+
+	useEffect(() => {
+		if (!authToken) {
+			navigate('/unauthorized');
+		}
+	}, [authToken, navigate]);
 
 	return (
 		<Layout>

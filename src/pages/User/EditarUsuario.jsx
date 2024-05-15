@@ -26,8 +26,12 @@ export default function EditarUsuario() {
 			try {
 			const data = await userService.getOneById(id)
 			const data2 = await userService.getOne(authToken)
+			
 			setProfile(data)
 			setUser(data2.user)
+			if (data2.user.role !== 'Admin' && data2.user.id !== data.id) {
+				navigate("/unauthorized")
+			}
 			return (data, data2)
 			} catch (error) {
 			Logger.error(error.message)

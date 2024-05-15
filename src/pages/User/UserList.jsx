@@ -17,15 +17,17 @@ export default function UserList() {
     setUserToDelete(null);
   };
 	const [users, setUsers] = useState(null)
-	const [ profile, setProfile ] = useState({})
 	const [showModal, setShowModal] = useState(false)
 	const [userToDelete, setUserToDelete] = useState(null)
-	const { authToken } = useContext(UserContext)
+	const { authToken, user, profile, setProfile } = useContext(UserContext)
 	const navigate = useNavigate()
 
 	const [queryParams, setQueryParams] = useSearchParams();
 
 	useEffect(() => {
+		if (!authToken || profile.role !== 'Admin') {
+			navigate('/unauthorized');
+		}
 		(async () => {
 			try {
 				const data = await userService.getAll()
@@ -34,9 +36,6 @@ export default function UserList() {
 
 				const userData = await userService.getOne(authToken)
 				setProfile(userData.user)
-				if (userData.user.role !== 'Admin') {
-					navigate('/unauthorized');
-				}
 				return data
 			} catch (error) {
 				Logger.error(error.message)

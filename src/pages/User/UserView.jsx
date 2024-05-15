@@ -16,24 +16,21 @@ export default function UserView() {
 
 	const { userService } = useServicesContext()
 
-	const { authToken } = useContext(UserContext)
+	const { authToken, profile, setProfile, user, setUser } = useContext(UserContext)
 
 	const navigate = useNavigate()
 
-	const [ profile, setProfile ] = useState({})
-
-	const [user, setUser] = useState(null)
 
 	useEffect(() => {
+		if (profile.role !== 'Admin') {
+			navigate('/unauthorized');
+		}
 		(async () => {
 			try {
 				const data = await userService.getOneById(id)
 				setUser(data)
 				const userData = await userService.getOne(authToken)
 				setProfile(userData.user)
-				if (userData.user.role !== 'Admin') {
-					navigate('/unauthorized');
-				}
 				return data
 			} catch (error) {
 				Logger.error(error.message)

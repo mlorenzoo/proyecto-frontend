@@ -14,23 +14,23 @@ export default function NuevoUsuario() {
 	const { authToken, user, profile, setProfile } = useContext(UserContext)
 
 	useEffect(() => {
-		if (!profile || profile.role !== "Admin") {
+		if (!authToken || profile.role !== "Admin" && profile.role !== "Gestor") {
 		  navigate('/unauthorized')
 		}
-	  }, [profile, navigate])
+	 	}, [profile, navigate])
 
-	async function onSubmit(data) {
-		Logger.debug("Register form submitted")
-		console.log(data)
-		// Auth 
-		try {
-			await authService.doRegisterRole(data.name, data.surname, data.email, data.password, data.role)
-			navigate("/users")
-			alert("Registre OK!")
-		} catch (error) {
-			Logger.error(error.message)
-			alert("ERROR durant el registre... :_(")
-		}
+		async function onSubmit(data) {
+			Logger.debug("Register form submitted")
+			console.log(data)
+			// Auth 
+			try {
+				await authService.doRegisterRole(data.name, data.surname, data.email, data.password, data.role)
+				navigate("/users")
+				alert("Registre OK!")
+			} catch (error) {
+				Logger.error(error.message)
+				alert("ERROR durant el registre... :_(")
+			}
 	}
 
 	const schema = Yup.object().shape({
@@ -133,11 +133,17 @@ export default function NuevoUsuario() {
 							<Form.Group className="mb-3" controlId="formRole">
 								<Form.Label>Rol:</Form.Label>
 								<Form.Select aria-label="Default select example" name="role" onChange={handleChange} value={values.role}>
-								<option>---</option>
-								<option value="Admin">Admin</option>
-								<option value="Gestor">Gestor</option>
-								<option value="Barbero">Barbero</option>
-								<option value="Cliente">Cliente</option>
+								{profile.role === 'Admin' ? (
+										<>
+											<option value="---">---</option>
+											<option value="Admin">Admin</option>
+											<option value="Gestor">Gestor</option>
+											<option value="Barbero">Barbero</option>
+											<option value="Cliente">Cliente</option>
+										</>
+									) : (
+										<option value="Barbero">Barbero</option>
+								)}
 								</Form.Select>
 							</Form.Group>
 							<Button variant="primary" type="submit">

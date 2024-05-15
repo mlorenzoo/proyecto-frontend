@@ -6,20 +6,23 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
-import { Button, Table } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import UserContext from '../../contexts/UserContext';
+import DatePicker from 'react-datepicker';
+import "react-datepicker/dist/react-datepicker.css";
 
 export default function BarbershopView() {
 
-  Logger.debug("BarbershopView page")
+  Logger.debug("BarbershopView page");
 
   const { id } = useParams();
   const { bsService, userService } = useServicesContext();
   const [barbershop, setBarbershop] = useState(null);
   const [barbers, setBarbers] = useState(null);
   const [profile, setProfile] = useState(null);
-	const navigate = useNavigate()
+  const navigate = useNavigate();
   const { authToken } = useContext(UserContext);
+  const [startDate, setStartDate] = useState(new Date());
 
   useEffect(() => {
     (async () => {
@@ -38,24 +41,21 @@ export default function BarbershopView() {
       }
     })();
   }, [id]);
-  console.log(profile)
-	
 
   const handleDeleteBarber = async (barberId) => {
     try {
-      const quitBarberData = await bsService.quitBarber(barberId);
-			window.location.reload();
-
+      await bsService.quitBarber(barberId);
+      window.location.reload();
     } catch (error) {
       Logger.error(error.message);
       alert(error);
-      console.log(error)
+      console.log(error);
     }
   };
 
   const handleAddBarber = async (barberId) => {
     try {
-      const data = await bsService.addBarberToBarbershop(barberId, barbershop.id)
+      await bsService.addBarberToBarbershop(barberId, barbershop.id);
       window.location.reload();
     } catch (error) {
       Logger.error(error.message);
@@ -85,7 +85,6 @@ export default function BarbershopView() {
                     </thead>
                     <tbody>
                       {barbers && barbers.map((barber, index) => {
-                        console.log("Barber:", barber.barbershop_id); 
                         if (barber.barbershop_id === barbershop.id) {
                           return (
                             <tr key={index}>
@@ -117,7 +116,6 @@ export default function BarbershopView() {
                     </thead>
                     <tbody>
                       {barbers && barbers.map((barber, index) => {
-                        console.log("Barber:", barber.barbershop_id); 
                         if (barber.barbershop_id === null) {
                           return (
                             <tr key={index}>
@@ -131,7 +129,7 @@ export default function BarbershopView() {
                             </tr>
                           );
                         } else {
-                          return null; // No hacer nada si barber.user.barbershop_id no es null
+                          return null;
                         }
                       })}
                     </tbody>
@@ -140,39 +138,24 @@ export default function BarbershopView() {
               ) : (
                 <div className="col-md-6">
                   <h3>Calendario</h3>
-                  <Table striped bordered hover>
-                    <thead>
-                      <tr>
-                        <th>Día</th>
-                        <th>Disponible</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>Lunes</td>
-                        <td></td>
-                      </tr>
-                      <tr>
-                        <td>Martes</td>
-                        <td></td>
-                      </tr>
-                      <tr>
-                        <td>Miércoles</td>
-                        <td></td>
-                      </tr>
-                      <tr>
-                        <td>Jueves</td>
-                        <td></td>
-                      </tr>
-                      <tr>
-                        <td>Viernes</td>
-                        <td></td>
-                      </tr>
-                    </tbody>
-                  </Table>
+                  <DatePicker selected={startDate} onChange={(date) => setStartDate(date)} />
+                  <h3 className="mt-4">Barberos</h3>
+                  <div>
+                    {barbers && barbers.map((barber, index) => {
+                      if (barber.barbershop_id === barbershop.id) {
+                        return (
+                          <Button key={index} variant="primary" className="m-2">
+                            {barber.user.name} {barber.user.surname}
+                          </Button>
+                        );
+                      } else {
+                        return null;
+                      }
+                    })}
+                  </div>
                 </div>
               )}
-              
+
               <div className="col-md-6">
                 <h3>Dirección</h3>
                 <p>{barbershop.ubication}</p>

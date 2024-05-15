@@ -5,6 +5,8 @@ import { useState, useEffect, useContext } from 'react'
 import { Button, Form, Row, Col, Card, Modal } from 'react-bootstrap'
 import { Link, useSearchParams } from 'react-router-dom'
 import UserContext from '../../contexts/UserContext'
+import { useNavigate } from "react-router-dom";
+
 
 export default function BarbershopList() {
 
@@ -13,15 +15,20 @@ export default function BarbershopList() {
   const { bsService, userService } = useServicesContext()
 
   const [barbershops, setBarbershops] = useState(null)
-  const [profile, setProfile] = useState(null)
   const [showModal, setShowModal] = useState(false)
   const [barbershopToDelete, setBarbershopToDelete] = useState(null)
-  const { authToken } = useContext(UserContext)
+  const { authToken, user, profile, setProfile  } = useContext(UserContext)
+  const navigate = useNavigate();
+
   console.log(authToken)
 
   const [queryParams, setQueryParams] = useSearchParams();
 
   useEffect(() => {
+    if (!authToken) {
+      navigate('/unauthorized');
+    }
+
     (async () => {
       try {
         const data = await bsService.getBarbershop()
@@ -126,7 +133,9 @@ export default function BarbershopList() {
                     <Link to={`/barbershops/${barbershop.id}`}>
                       <Button variant="primary" onClick={() => handleDetailsClick(barbershop.id)}>Ver detalles</Button>
                     </Link>
+                    {profile && profile.role === "Gestor" && (
                     <Button variant="danger" onClick={() => handleShowModal(barbershop)}>Eliminar</Button>
+                    )}
                   </Card.Body>
                 </Card>
               </div>
@@ -144,9 +153,9 @@ export default function BarbershopList() {
             <Button variant="secondary" onClick={handleCloseModal}>
               Cancelar
             </Button>
-            <Button variant="danger" onClick={handleDeleteBarbershop}>
-              Eliminar
-            </Button>
+              <Button variant="danger" onClick={handleDeleteBarbershop}>
+                Eliminar
+              </Button>
           </Modal.Footer>
         </Modal>
       </section>

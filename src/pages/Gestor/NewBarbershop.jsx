@@ -13,21 +13,18 @@ import UserContext from "../../contexts/UserContext";
 const NewBarbershop = () => {
   const navigate = useNavigate();
   const { userService, bsService } = useServicesContext();
-  const { authToken, profile, setProfile } = useContext(UserContext);
+  const { authToken, user, profile, setProfile } = useContext(UserContext);
 
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        if (!authToken) {
-          throw new Error('Usuario no autenticado');
+        if (!authToken || profile.role !== 'Gestor') {
+          navigate('/unauthorized');
         }
 
         const userData = await userService.getOne(authToken);
         setProfile(userData.user);
 
-        if (userData.user.role !== 'Gestor') {
-          navigate('/unauthorized');
-        }
       } catch (error) {
         Logger.error(error.message);
         navigate('/unauthorized');

@@ -1,29 +1,39 @@
-import React from 'react';
+import React, { useEffect, useContext } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import Layout from '../../components/Layout';
 import useServicesContext from '../../hooks/useServicesContext';
 import Logger from '../../library/Logger';
+import UserContext from '../../contexts/UserContext'
 import { useNavigate } from 'react-router-dom';
 
 const NewPlan = () => {
   const navigate = useNavigate();
   const { subsService } = useServicesContext();
+  const { authToken, user, profile, setProfile  } = useContext(UserContext)
+
+  useEffect(() => {
+    if (!authToken || profile.role !== "Gestor") {
+      navigate('/unauthorized');
+    }
+  }, [])
+  console.log(profile)
+
 
   async function onSubmit(data) {
-		Logger.debug("Register form submitted")
-		console.log(data)
-		// Auth 
-		try {
-			await subsService.addSubs(data.plan, data.price, data.description, data.duration)
-			navigate("/subscriptions")
-			alert("Plan añadido!")
-		} catch (error) {
-			Logger.error(error.message)
-			alert("ERROR durant el registre... :_(")
-		}
-	}
+    Logger.debug("Register form submitted")
+    console.log(data)
+    // Auth 
+    try {
+      await subsService.addSubs(data.plan, data.price, data.description, data.duration)
+      navigate("/subscriptions")
+      alert("Plan añadido!")
+    } catch (error) {
+      Logger.error(error.message)
+      alert("ERROR durant el registre... :_(")
+    }
+  }
 
   const validationSchema = Yup.object().shape({
     plan: Yup.string().required('El plan es obligatorio'),

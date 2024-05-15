@@ -5,14 +5,13 @@ import Logger from '../../library/Logger';
 import useServicesContext from '../../hooks/useServicesContext';
 import PayPalButton from "../../PayPalButton";
 import UserContext from "../../contexts/UserContext";
-import { useNavigate } from 'react-router-dom'
-
+import { useNavigate } from 'react-router-dom';
 
 const Pricing = () => {
   const { subsService, userService, payService } = useServicesContext();
   const [subscriptions, setSubscriptions] = useState([]);
-  const { authToken, user, profile } = useContext(UserContext);
-  const navigate = useNavigate()
+  const { authToken, user, profile, setProfile } = useContext(UserContext); // Added setProfile to useContext
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -22,23 +21,23 @@ const Pricing = () => {
         setProfile(dataUser.user);
         const data = await subsService.getSubs();
         setSubscriptions(data);
-        if (profile.role !== 'Cliente') {
-					navigate('/unauthorized');
-				}
+        if (dataUser.user.role !== 'Cliente') { // Ensure the profile role check is done after setting the profile
+          navigate('/unauthorized');
+        }
       } catch (error) {
         Logger.error(error.message);
       }
-    })();
-  }, [ navigate ]);
+    };
+    fetchData(); // Fixed the immediately invoked function
+  }, [authToken, navigate, setProfile, subsService, userService]);
 
   useEffect(() => {
-		if (!user) {
-			navigate('/unauthorized');
-		}
-	}, [authToken, navigate]);
+    if (!user) {
+      navigate('/unauthorized');
+    }
+  }, [authToken, navigate, user]);
 
   const handleSubscriptionSelect = (subscription) => {
-    // Handle subscription selection logic here
     console.log("Selected subscription:", subscription);
   };
 
@@ -49,11 +48,10 @@ const Pricing = () => {
         const client = await userService.getClient(profile.id);
         console.log(client);
         const currentDate = new Date();
-        console.log(currentDate)
+        console.log(currentDate);
         const pay = await payService.newPayment(profile.id, currentDate, plan, price, client);
         alert("Completed");
-        navigate("/")
-        navi
+        navigate("/");
       } catch (error) {
         alert("Error en la creación del pago. Por favor, inténtalo de nuevo más tarde.");
         console.log(error);
@@ -89,7 +87,11 @@ const Pricing = () => {
                     </small>
                   </h1>
                   <p>{subscription.description}</p>
-                  <PayPalButton totalValue={subscription.price} invoice={subscription.plan} onSuccess={(orderData) => handleOrderCapture(orderData, subscription.plan, subscription.price)} />
+                  <PayPalButton 
+                    totalValue={subscription.price} 
+                    invoice={subscription.plan} 
+                    onSuccess={(orderData) => handleOrderCapture(orderData, subscription.plan, subscription.price, profile.id)} 
+                  />
                 </div>
               </div>
             </div>

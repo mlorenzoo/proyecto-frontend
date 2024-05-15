@@ -75,7 +75,11 @@ export default function EditarUsuario() {
 			}
 			await userService.doEdit(profile.id, editedData, authToken);
 			alert("Usuario editado con éxito!");
-			navigate("/users");
+			if (user.role === 'Admin') {
+				navigate("/users");
+			} else if (user.id === profile.id) {
+				navigate("/profile");
+			}		
 		} catch (error) {
 			Logger.error(error.message);
 			alert("ERROR");

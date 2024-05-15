@@ -5,6 +5,7 @@ import Logger from '../../library/Logger';
 import useServicesContext from '../../hooks/useServicesContext';
 import PayPalButton from "../../PayPalButton";
 import UserContext from "../../contexts/UserContext";
+import { useNavigate } from "react-router-dom";
 
 const Pricing = () => {
   const { subsService, userService, payService } = useServicesContext();
@@ -13,6 +14,7 @@ const Pricing = () => {
   const { authToken } = useContext(UserContext);
   const { user } = useContext(UserContext);
   const { order } = useContext(UserContext);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -35,10 +37,13 @@ const Pricing = () => {
     if (orderData.status === 'COMPLETED') {
       try {
         const client = await userService.getClient(profile.id);
+        console.log(client);
         const currentDate = new Date();
         console.log(currentDate)
-        const pay = await payService.newPayment(profile.id, currentDate, plan, price);
+        const pay = await payService.newPayment(profile.id, currentDate, plan, price, client);
         alert("Completed");
+        navigate("/")
+        navi
       } catch (error) {
         alert("Error en la creación del pago. Por favor, inténtalo de nuevo más tarde.");
         console.log(error);

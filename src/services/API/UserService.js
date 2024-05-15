@@ -121,29 +121,23 @@ export default class UserService {
 
 	async getClient(id) {
     try {
-        const url = process.env.API_URL + `/userclient/${id}`;
-        const resp = await fetch(url, {
-            headers: {
-                "Accept": "application/json"
-            },
-            method: "GET"
-        });
-        const json = await resp.json();
-        console.log(json);
-        if (json.success) {                
-            const client = json.data.find(client => client.user_id === userId);
-            if (client) {
-							console.log(client)
-                return client;
-            } else {
-                throw new Error("Client not found");
-            }
-        } else {
-            throw new Error("Unable to get all users");
-        }
+			const url = process.env.API_URL + `/userclient/${id}`;
+			const resp = await fetch(url, {
+					headers: {
+							"Accept": "application/json"
+					},
+					method: "GET"
+			});
+			const json = await resp.json();
+			console.log(json.data.client_id);
+			if (json.success) {
+				return(json.data.client_id)
+			} else {
+					throw new Error("Unable to get all users");
+			}
     } catch (error) {
         throw error;
     }
 	}
-
+	
 }

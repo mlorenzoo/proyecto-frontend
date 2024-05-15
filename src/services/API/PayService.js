@@ -12,6 +12,7 @@ export default class PayService {
         body: JSON.stringify({ user_id, pay_date, plan, amount })
 			});
 			const json = await resp.json();
+      console.log(json)
 
 			if (json.success) {
 				console.log(json.data)

@@ -6,6 +6,7 @@ import ProductService from '../services/API/ProductService';
 import UserService from '../services/API/UserService';
 import SubsService from '../services/API/SubsService';
 import BarbershopsService from '../services/API/BarbershopsService';
+import PayService from '../services/API/PayService';
 
 const ServicesContext = createContext();
 
@@ -19,6 +20,7 @@ export const ServicesContextProvider = ({ children }) => {
     userService: new UserService(),
     subsService: new SubsService(),
     bsService: new BarbershopsService(),
+    payService: new PayService()
   };
   
   return (

@@ -7,37 +7,45 @@ import PayPalButton from "../../PayPalButton";
 import UserContext from "../../contexts/UserContext";
 
 const Pricing = () => {
-  const { subsService, userService } = useServicesContext();
+  const { subsService, userService, payService } = useServicesContext();
   const [subscriptions, setSubscriptions] = useState([]);
   const [profile, setProfile] = useState([]);
   const { authToken } = useContext(UserContext);
   const { user } = useContext(UserContext);
-  console.log(authToken);
+  const { order } = useContext(UserContext);
 
   useEffect(() => {
-    (async () => {
-      // Auth 
+    const fetchData = async () => {
       try {
+        const dataUser = await userService.getOne(authToken);
+        console.log(dataUser);
+        setProfile(dataUser.user);
         const data = await subsService.getSubs();
         setSubscriptions(data);
-        const dataUser = await userService.getOne(authToken)
-				console.log(dataUser);
-				setProfile(dataUser.user)
       } catch (error) {
         Logger.error(error.message);
       }
-    })();
-  }, []);
+    };
 
-  const handleSubscriptionSelect = (subscription) => {
-    // Handle subscription selection logic here
-    console.log("Selected subscription:", subscription);
-  };
+    fetchData();
+  }, [authToken]);
 
-  const handleOrderCapture = (orderData) => {
-    // Aquí puedes hacer lo que necesites con la información de la orden
+  const handleOrderCapture = async (orderData, plan, price, profileId) => {
     console.log("Orden capturada:", orderData);
-    // Por ejemplo, puedes establecer un estado con la información de la orden
+    if (orderData.status === 'COMPLETED') {
+      try {
+        const client = await userService.getClient(profile.id);
+        const currentDate = new Date();
+        console.log(currentDate)
+        const pay = await payService.newPayment(profile.id, currentDate, plan, price);
+        alert("Completed");
+      } catch (error) {
+        alert("Error en la creación del pago. Por favor, inténtalo de nuevo más tarde.");
+        console.log(error);
+      }
+    } else {
+      alert("Error en el pago");
+    }
   };
 
   return (
@@ -66,7 +74,7 @@ const Pricing = () => {
                     </small>
                   </h1>
                   <p>{subscription.description}</p>
-                  <PayPalButton totalValue={subscription.price} invoice={subscription.plan}/>
+                  <PayPalButton totalValue={subscription.price} invoice={subscription.plan} onSuccess={(orderData) => handleOrderCapture(orderData, subscription.plan, subscription.price)} />
                 </div>
               </div>
             </div>

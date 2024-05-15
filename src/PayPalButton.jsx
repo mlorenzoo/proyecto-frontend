@@ -1,10 +1,22 @@
 import React, { useContext } from "react";
 import { PayPalButtons } from "@paypal/react-paypal-js";
 import UserContext from "./contexts/UserContext";
+import useServicesContext from "./hooks/useServicesContext";
 
 const PayPalButton = (props) => {
-  const { user } = useContext(UserContext)
-  console.log(user)
+  const { user } = useContext(UserContext);
+  const { payService } = useServicesContext();
+
+  const handleApprove = async (data, actions) => {
+    const order = await actions.order?.capture();
+    console.log("order", order);
+
+    // Llamar a la función de devolución de llamada si está definida
+    if (props.onSuccess) {
+      props.onSuccess(order);
+    }
+  };
+
   return (
     <PayPalButtons 
       createOrder={(data, actions) => {
@@ -19,10 +31,7 @@ const PayPalButton = (props) => {
           ],
         });
       }}
-      onApprove={ async (data, actions) => {
-        const order = await actions.order?.capture();
-        console.log("order", order);
-      }}
+      onApprove={handleApprove}
     />
   );
 };

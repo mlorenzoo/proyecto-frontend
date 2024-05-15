@@ -6,7 +6,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
-import { Button } from 'react-bootstrap';
+import { Button, Table } from 'react-bootstrap';
 import UserContext from '../../contexts/UserContext';
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
@@ -21,6 +21,8 @@ export default function BarbershopView() {
   const [barbers, setBarbers] = useState(null);
 	const navigate = useNavigate()
   const { authToken, user, profile, setProfile  } = useContext(UserContext)
+  const [selectedDay, setSelectedDay] = useState(new Date()); 
+
 
   useEffect(() => {
     if (!authToken) {
@@ -64,6 +66,25 @@ export default function BarbershopView() {
     }
   };
 
+  const handleDayChange = (date) => {
+    setSelectedDay(date);
+  };
+  
+const isDayAvailable = () => {
+  if (selectedDay && barbershop && barbers) {
+    const barber = barbers.find(b => b.barbershop_id === barbershop.id);
+    if (barber && barber.schedules) {
+      // Obtener el día de la semana en el formato de barber_schedules (1 para Lunes, 7 para Domingo)
+      const dayOfWeek = selectedDay.getDay() === 0 ? 7 : selectedDay.getDay(); // Convertir Domingo (0) a 7
+      
+      // Verificar si hay algún horario para el día seleccionado
+      return barber.schedules.some(schedule => schedule.day_of_week === dayOfWeek);
+    }
+  }
+  return false;
+};
+
+ 
   return (
     <Layout>
       <section id="barbershop" className="w-75 m-auto">
@@ -78,7 +99,7 @@ export default function BarbershopView() {
                   <Table className='mb-5' striped bordered hover>
                     <thead>
                       <tr>
-                        <th>#</th>
+                        <th>#</th>  
                         <th>Nombre</th>
                         <th>Apellido</th>
                         <th>Email</th>
@@ -140,7 +161,8 @@ export default function BarbershopView() {
               ) : (
                 <div className="col-md-6">
                   <h3>Calendario</h3>
-                  <DatePicker selected={startDate} onChange={(date) => setStartDate(date)} />
+                  <DatePicker selected={selectedDay} onChange={handleDayChange} />
+                  {isDayAvailable() && <div className="availability-box">Puedes seleccionar este día</div>}
                   <h3 className="mt-4">Barberos</h3>
                   <div>
                     {barbers && barbers.map((barber, index) => {

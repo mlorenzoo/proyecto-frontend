@@ -19,12 +19,14 @@ export default function BarbershopView() {
   const { bsService, userService } = useServicesContext();
   const [barbershop, setBarbershop] = useState(null);
   const [barbers, setBarbers] = useState(null);
-  const [profile, setProfile] = useState(null);
-  const navigate = useNavigate();
-  const { authToken } = useContext(UserContext);
-  const [startDate, setStartDate] = useState(new Date());
+	const navigate = useNavigate()
+  const { authToken, user, profile, setProfile  } = useContext(UserContext)
 
   useEffect(() => {
+    if (!authToken) {
+      navigate('/unauthorized');
+    }
+    
     (async () => {
       try {
         const barbershopData = await bsService.getBarbershopById(id);

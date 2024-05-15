@@ -12,7 +12,7 @@ import * as Yup from 'yup'
 export default function Login() {
 
 	const navigate = useNavigate()
-	const { setAuthToken, setUser } = useUserContext()
+	const { setAuthToken, setUser, setProfile } = useUserContext()
 	const { authService, lSessionService, sSessionService, userService } = useServicesContext()
 
 	async function onSubmit(data) {
@@ -24,16 +24,16 @@ export default function Login() {
 			console.log(authToken);
 			if (authToken) {
 				const user = { "email": data.email, "remember": data.remember }
+				// User profile
+				const userData = await userService.getOne(authToken)
+				const profile = userData.user
 				// Session			
 				const sessionService = user.remember ? lSessionService : sSessionService
-				sessionService.createSession({ authToken, user })
-
-				const userData = await userService.getOne(authToken);
-				console.log(userData.user);
-
+				sessionService.createSession({ authToken, user, profile })
 				// State
 				setAuthToken(authToken)
-				setUser(userData.user)
+				setUser(user)
+				setProfile(profile)
 				// Redirect
 				navigate("/")
 				alert("Inici de sessió OK!")

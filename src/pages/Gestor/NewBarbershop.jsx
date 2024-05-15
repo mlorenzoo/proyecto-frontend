@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
@@ -7,26 +7,32 @@ import useServicesContext from '../../hooks/useServicesContext';
 import Logger from '../../library/Logger';
 import { useNavigate } from 'react-router-dom';
 import useUserContext from '../../hooks/useUserContext';
+import UserContext from "../../contexts/UserContext";
+
 
 const NewBarbershop = () => {
   const navigate = useNavigate();
   const { userService, bsService } = useServicesContext();
-  const [profile, setProfile] = useState({});
-  const { authToken } = useUserContext();
+  const { authToken, user, profile, setProfile } = useContext(UserContext);
 
   useEffect(() => {
     const fetchProfile = async () => {
       try {
+        if (!authToken || profile.role !== 'Gestor') {
+          navigate('/unauthorized');
+        }
+
         const userData = await userService.getOne(authToken);
-        console.log(userData);
         setProfile(userData.user);
+
       } catch (error) {
         Logger.error(error.message);
+        navigate('/unauthorized');
       }
     };
 
     fetchProfile();
-  }, [userService, authToken]);
+  }, [userService, authToken, setProfile, navigate]);
 
   const onSubmit = async (data) => {
     Logger.debug("Register form submitted");

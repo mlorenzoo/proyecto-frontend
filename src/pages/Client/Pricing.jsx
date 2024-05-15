@@ -5,16 +5,14 @@ import Logger from '../../library/Logger';
 import useServicesContext from '../../hooks/useServicesContext';
 import PayPalButton from "../../PayPalButton";
 import UserContext from "../../contexts/UserContext";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from 'react-router-dom'
+
 
 const Pricing = () => {
   const { subsService, userService, payService } = useServicesContext();
   const [subscriptions, setSubscriptions] = useState([]);
-  const [profile, setProfile] = useState([]);
-  const { authToken } = useContext(UserContext);
-  const { user } = useContext(UserContext);
-  const { order } = useContext(UserContext);
-  const navigate = useNavigate();
+  const { authToken, user, profile } = useContext(UserContext);
+  const navigate = useNavigate()
 
   useEffect(() => {
     const fetchData = async () => {
@@ -24,13 +22,25 @@ const Pricing = () => {
         setProfile(dataUser.user);
         const data = await subsService.getSubs();
         setSubscriptions(data);
+        if (profile.role !== 'Cliente') {
+					navigate('/unauthorized');
+				}
       } catch (error) {
         Logger.error(error.message);
       }
-    };
+    })();
+  }, [ navigate ]);
 
-    fetchData();
-  }, [authToken]);
+  useEffect(() => {
+		if (!user) {
+			navigate('/unauthorized');
+		}
+	}, [authToken, navigate]);
+
+  const handleSubscriptionSelect = (subscription) => {
+    // Handle subscription selection logic here
+    console.log("Selected subscription:", subscription);
+  };
 
   const handleOrderCapture = async (orderData, plan, price, profileId) => {
     console.log("Orden capturada:", orderData);

@@ -1,12 +1,11 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import Layout from '../../components/Layout';
 import Logger from '../../library/Logger';
 import useServicesContext from '../../hooks/useServicesContext';
-import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
-import { Button } from 'react-bootstrap';
+import { Button, Table } from 'react-bootstrap'; // Import Table from react-bootstrap
 import UserContext from '../../contexts/UserContext';
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";

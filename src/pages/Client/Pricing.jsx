@@ -10,7 +10,12 @@ import { useNavigate } from 'react-router-dom';
 const Pricing = () => {
   const { subsService, userService, payService } = useServicesContext();
   const [subscriptions, setSubscriptions] = useState([]);
-  const { authToken, user, profile, setProfile } = useContext(UserContext); // Added setProfile to useContext
+  const [profile, setProfile] = useState([]);
+  const [clientId, setClientId] = useState([]);
+  const [isSub, setIsSub] = useState([]);
+  const { authToken } = useContext(UserContext);
+  const { user } = useContext(UserContext);
+  const { order } = useContext(UserContext);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -19,11 +24,15 @@ const Pricing = () => {
         const dataUser = await userService.getOne(authToken);
         console.log(dataUser);
         setProfile(dataUser.user);
+
         const data = await subsService.getSubs();
         setSubscriptions(data);
-        if (dataUser.user.role !== 'Cliente') { // Ensure the profile role check is done after setting the profile
-          navigate('/unauthorized');
-        }
+
+        const client = await userService.getClient(dataUser.user.id);
+        setClientId(client);
+
+        const clientSub = await userService.getIfSub(client);
+        setIsSub(clientSub);
       } catch (error) {
         Logger.error(error.message);
       }
@@ -45,11 +54,9 @@ const Pricing = () => {
     console.log("Orden capturada:", orderData);
     if (orderData.status === 'COMPLETED') {
       try {
-        const client = await userService.getClient(profile.id);
-        console.log(client);
         const currentDate = new Date();
         console.log(currentDate);
-        const pay = await payService.newPayment(profile.id, currentDate, plan, price, client);
+        const pay = await payService.newPayment(profile.id, currentDate, plan, price, clientId);
         alert("Completed");
         navigate("/");
       } catch (error) {
@@ -87,11 +94,17 @@ const Pricing = () => {
                     </small>
                   </h1>
                   <p>{subscription.description}</p>
-                  <PayPalButton 
-                    totalValue={subscription.price} 
-                    invoice={subscription.plan} 
-                    onSuccess={(orderData) => handleOrderCapture(orderData, subscription.plan, subscription.price, profile.id)} 
-                  />
+                  {isSub ? (
+                    <div className="alert alert-info">
+                      Ya estás suscrito a nuestros servicios
+                    </div>
+                  ) : (
+                    <PayPalButton 
+                      totalValue={subscription.price} 
+                      invoice={subscription.plan} 
+                      onSuccess={(orderData) => handleOrderCapture(orderData, subscription.plan, subscription.price)} 
+                    />
+                  )}
                 </div>
               </div>
             </div>

@@ -98,6 +98,30 @@ export default class UserService {
 		}
 	}
 
+	async updateProfilePicture(id, formData) {
+    try {
+				const url = process.env.API_URL + `/users/${id}/update-pfp`;
+        const resp = await fetch(url, {
+					headers: {
+						"Accept": "application/json"
+					},
+					method: "POST",
+					body: formData
+        });
+
+        const json = await resp.json();
+        console.log(json);
+
+        if (json.success) {                
+            return json.data;
+        } else {
+            throw new Error("No se pudo actualizar la imagen de perfil del usuario");
+        }
+    } catch (error) {
+        throw error;
+    }
+	}
+
 	async doDelete(id) {
 		try {
 			const url = process.env.API_URL + `/users/${id}`
@@ -132,6 +156,27 @@ export default class UserService {
 			console.log(json.data.client_id);
 			if (json.success) {
 				return(json.data.client_id)
+			} else {
+					throw new Error("Unable to get all users");
+			}
+    } catch (error) {
+        throw error;
+    }
+	}
+
+	async getIfSub(client_id) {
+    try {
+			const url = process.env.API_URL + `/clients/${client_id}`;
+			const resp = await fetch(url, {
+					headers: {
+							"Accept": "application/json"
+					},
+					method: "GET"
+			});
+			const json = await resp.json();
+			console.log(json);
+			if (json.success) {
+				return(json.data.subscribed)
 			} else {
 					throw new Error("Unable to get all users");
 			}

@@ -46,6 +46,7 @@ export default function EditarUsuario() {
 		// Auth
 		try {
 			const editedData = {};
+			const formData = new FormData();
 			
 			// Agregar solo los campos modificados al objeto editedData
 			if (data.name !== '' && data.name !== profile.name) {
@@ -71,9 +72,12 @@ export default function EditarUsuario() {
 				editedData.password = data.password;
 			}
 			if (data.pfp instanceof File) {
-				editedData.pfp = data.pfp;
+				formData.append('pfp', data.pfp);
 			}
+			console.log(data.pfp)
+			console.log(formData)
 			await userService.doEdit(profile.id, editedData, authToken);
+			const pfp = await userService.updateProfilePicture(profile.id, formData)
 			alert("Usuario editado con éxito!");
 			if (user.role === 'Admin') {
 				navigate("/users");
@@ -89,14 +93,14 @@ export default function EditarUsuario() {
 	
 
     const schema = Yup.object().shape({
-        name: Yup.string(),
-        surname: Yup.string(),
-        email: Yup.string().email('Introdueix una adreça de correu vàlida'),
-        role: Yup.string().notOneOf(['---'], 'Selecciona un rol'),
-        address: Yup.string().nullable(),
-        phone: Yup.string().matches(/^\d{9}$/, 'Introduce un número de teléfono válido de 9 dígitos').nullable(),
-        password: Yup.string().min(8, 'La contraseña debe tener al menos 8 caracteres'),
-		pfp: Yup.mixed().nullable(),
+			name: Yup.string(),
+			surname: Yup.string(),
+			email: Yup.string().email('Introdueix una adreça de correu vàlida'),
+			role: Yup.string().notOneOf(['---'], 'Selecciona un rol'),
+			address: Yup.string().nullable(),
+			phone: Yup.string().matches(/^\d{9}$/, 'Introduce un número de teléfono válido de 9 dígitos').nullable(),
+			password: Yup.string().min(8, 'La contraseña debe tener al menos 8 caracteres'),
+			pfp: Yup.mixed().nullable(),
     });
   
 
@@ -105,24 +109,24 @@ export default function EditarUsuario() {
 			<section id="login" className="w-75 m-auto">
 			<h2>Editar usuario "{profile.name}"</h2>
 			<Formik
-                    validationSchema={schema}
-                    onSubmit={onSubmit}
-                    initialValues={{
-                        name: profile.name || '',
-                        surname: profile.surname || '',
-                        email: profile.email || '',
-                        role: profile.role || '',
-                        address: profile.address || '',
-                        phone: profile.phone || '',
-                        password: '',
-                        pfp: profile.pfp || '',
-                        remember: false,
-                    }}
-                >
-        	{({ handleSubmit, handleChange, values, touched, errors }) => (        	
-			<Form noValidate onSubmit={handleSubmit}>
-                <Form.Group className="mb-3" controlId="formName">
-            		<Form.Label>Nombre</Form.Label>
+				validationSchema={schema}
+				onSubmit={onSubmit}
+				initialValues={{
+						name: profile.name || '',
+						surname: profile.surname || '',
+						email: profile.email || '',
+						role: profile.role || '',
+						address: profile.address || '',
+						phone: profile.phone || '',
+						password: '',
+						pfp: profile.pfp || '',
+						remember: false,
+				}}
+			>
+			{({ handleSubmit, handleChange, values, touched, errors }) => (        	
+			<Form noValidate onSubmit={handleSubmit} enctype="multipart/form-data">
+					<Form.Group className="mb-3" controlId="formName">
+					<Form.Label>Nombre</Form.Label>
 					<Form.Control 
     				value={values.name}
 					type="text" 
@@ -217,10 +221,14 @@ export default function EditarUsuario() {
 				<Form.Group className="mb-3" controlId="formPFP">
 					<Form.Label>Foto de perfil</Form.Label>
 					<Form.Control
-						type="file"
-						name="pfp"
-						onChange={(event) => handleChange(event) && setFieldValue("pfp", event.currentTarget.files[0])}
-						isInvalid={!!errors.pfp}
+							type="file"
+							name="pfp"
+							onChange={(event) => {
+									const file = event.currentTarget.files[0];
+									handleChange(event);
+									setFieldValue("pfp", file);
+							}}
+							isInvalid={!!errors.pfp}
 					/>
 					<Form.Control.Feedback type="invalid">
 						{errors.pfp}

@@ -173,6 +173,26 @@ export default class BarbershopsService {
       throw error;
     }
   }
+
+  async getAvailableAppointments(barberId, date) {
+    try {
+      const url = `${process.env.API_URL}/appointments/available?barber_id=${barberId}&date=${date}`;
+      const resp = await fetch(url, {
+        headers: {
+          "Accept": "application/json"
+        },
+        method: "GET"
+      });
+      const json = await resp.json();
+      if (json.success) {
+        return json.available_hours;
+      } else {
+        throw new Error("Unable to get available appointments");
+      }
+    } catch (error) {
+      throw error;
+    }
+  }  
   
   // async doRegister(name, surname, email, password) {
   //   try {

@@ -50,7 +50,6 @@ export function Header() {
 			}
 		})()
 	}, [])
-	console.log(profile)
 
 	return (
 		<header>

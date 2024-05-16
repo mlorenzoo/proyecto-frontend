@@ -7,29 +7,29 @@ import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import { Button, Table } from 'react-bootstrap';
 import UserContext from '../../contexts/UserContext';
-import { Calendar, momentLocalizer } from 'react-big-calendar';
-import moment from 'moment';
-import "react-big-calendar/lib/css/react-big-calendar.css";
-
-const localizer = momentLocalizer(moment);
-
+import DatePicker from 'react-datepicker';
+import "react-datepicker/dist/react-datepicker.css";
 
 export default function BarbershopView() {
   Logger.debug("BarbershopView page");
 
   const { id } = useParams();
-  const { bsService, userService } = useServicesContext();
+  const { bsService } = useServicesContext();
+  const { authToken, profile } = useContext(UserContext);
+  const navigate = useNavigate();
+
   const [barbershop, setBarbershop] = useState(null);
   const [barbers, setBarbers] = useState(null);
-  const [events, setEvents] = useState([]);
-	const navigate = useNavigate()
-  const { authToken, profile, setProfile  } = useContext(UserContext)
+  const [selectedBarber, setSelectedBarber] = useState(null);
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [availableAppointments, setAvailableAppointments] = useState([]);
+  const [showCalendar, setShowCalendar] = useState(false);
 
   useEffect(() => {
     if (!authToken) {
       navigate('/unauthorized');
     }
-    
+
     (async () => {
       try {
         const barbershopData = await bsService.getBarbershopById(id);
@@ -38,58 +38,31 @@ export default function BarbershopView() {
         const barbersData = await bsService.getBarbers();
         setBarbers(barbersData.data);
 
-        const userData = await userService.getOne(authToken);
-        setProfile(userData.user);
-
-        const events = await getBarberEvents(barbersData.data);
-        setEvents(events);
-
       } catch (error) {
         Logger.error(error.message);
         alert("ERROR cargando barbería... :-(");
       }
     })();
-  }, [id]);
+  }, [id, authToken, bsService, navigate]);
 
-  const getBarberEvents = async (barbers) => {
-    let events = [];
-    for (const barber of barbers) {
-      const schedules = await bsService.getBarberSchedules(barber.id);
-      if (schedules && schedules.length > 0) {
-        schedules.forEach(schedule => {
-          events.push({
-            title: `${barber.user.name} ${barber.user.surname}`,
-            start: new Date(schedule.start_time),
-            end: new Date(schedule.end_time),
-          });
-        });
+  const handleBarberSelection = async (barberId) => {
+    setSelectedBarber(barberId);
+    setShowCalendar(true);
+  };
+
+  const handleDateSelection = async (date) => {
+    setSelectedDate(date);
+
+    if (selectedBarber) {
+      try {
+        const response = await bsService.getAvailableAppointments(selectedBarber, date);
+        setAvailableAppointments(response.data);
+      } catch (error) {
+        Logger.error(error.message);
+        alert("ERROR cargando citas disponibles... :-(");
       }
     }
-    return events;
   };
-  
-  
-  const handleDeleteBarber = async (barberId) => {
-    try {
-      await bsService.quitBarber(barberId);
-      window.location.reload();
-    } catch (error) {
-      Logger.error(error.message);
-      alert(error);
-      console.log(error);
-    }
-  };
-
-  const handleAddBarber = async (barberId) => {
-    try {
-      await bsService.addBarberToBarbershop(barberId, barbershop.id);
-      window.location.reload();
-    } catch (error) {
-      Logger.error(error.message);
-    }
-  };
-
-  const availableBarbers = barbers && barbers.filter(barber => barber.barbershop_id === null);
 
   return (
     <Layout>
@@ -114,6 +87,7 @@ export default function BarbershopView() {
                     </thead>
                     <tbody>
                       {barbers && barbers.map((barber, index) => {
+                        console.log("Barber:", barber.barbershop_id); 
                         if (barber.barbershop_id === barbershop.id) {
                           return (
                             <tr key={index}>
@@ -144,48 +118,67 @@ export default function BarbershopView() {
                       </tr>
                     </thead>
                     <tbody>
-                      {availableBarbers && availableBarbers.map((barber, index) => (
-                        <tr key={index}>
-                          <td>{barber.id}</td>
-                          <td>{barber.user.name}</td>
-                          <td>{barber.user.surname}</td>
-                          <td>{barber.user.email}</td>
-                          <td>
-                            <Button variant="success" onClick={() => handleAddBarber(barber.id)}>Añadir</Button>
-                          </td>
-                        </tr>
-                      ))}
+                      {barbers && barbers.map((barber, index) => {
+                        console.log("Barber:", barber.barbershop_id); 
+                        if (barber.barbershop_id === null && barber.user.role !== "Admin") {
+                          return (
+                            <tr key={index}>
+                              <td>{barber.id}</td>
+                              <td>{barber.user.name}</td>
+                              <td>{barber.user.surname}</td>
+                              <td>{barber.user.email}</td>
+                              <td>
+                                <Button variant="success" onClick={() => handleAddBarber(barber.id)}>Añadir</Button>
+                              </td>
+                            </tr>
+                          );
+                        } else {
+                          return null; // No hacer nada si barber.user.barbershop_id no es null
+                        }
+                      })}
                     </tbody>
                   </Table>
                 </div>
               ) : (
                 <div className="col-md-6">
-                  <h3>Calendario</h3>
-                  <Calendar
-                  localizer={localizer}
-                  events={events}
-                  startAccessor="start"
-                  endAccessor="end"
-                  style={{ height: 500 }}
-                  />
-                  <h3>Barberos asignados a esta barbería:</h3>
-                  <div>
-                    {barbers && barbers.map((barber, index) => {
-                      if (barber.barbershop_id === barbershop.id) {
-                        return (
-                          <Button key={index} variant="primary" className="m-2">
-                            {barber.user.name} {barber.user.surname}
-                          </Button>
-                        );
-                      } else {
-                        return null;
-                      }
-                    })}
-                  </div>
-                </div>
-              )}
-
+                <h3>Seleccionar barbero</h3>
+                <p>Selecciona un barbero:</p>
+                {barbers && barbers.map((barber) => (
+                  <Button
+                    key={barber.id}
+                    variant={selectedBarber === barber.id ? "primary" : "secondary"}
+                    onClick={() => handleBarberSelection(barber.id)}
+                    className="mr-2 mb-2"
+                  >
+                    {barber.user.name} {barber.user.surname}
+                  </Button>
+                ))}
+              </div>
+            )}
+            {showCalendar && (
               <div className="col-md-6">
+                <h3>Calendario</h3>
+                <p>Selecciona una fecha:</p>
+                <DatePicker
+                  selected={selectedDate}
+                  onChange={date => handleDateSelection(date)}
+                  dateFormat="dd/MM/yyyy"
+                />
+              </div>
+            )}
+            {availableAppointments.length > 0 && (
+              <div className="row mt-4">
+                <div className="col-md-12">
+                  <h3>Citas disponibles</h3>
+                  <ul>
+                    {availableAppointments.map((appointment, index) => (
+                      <li key={index}>{appointment.time}</li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            )}
+              <div>
                 <h3>Dirección</h3>
                 <p>{barbershop.ubication}</p>
                 <MapContainer center={[barbershop.lat, barbershop.lon]} zoom={14} style={{ height: "400px", width: "100%" }}>
@@ -202,7 +195,7 @@ export default function BarbershopView() {
                 </MapContainer>
               </div>
             </div>
-          </>
+        </>
         ) : (
           <p>Cargando barbería...</p>
         )}

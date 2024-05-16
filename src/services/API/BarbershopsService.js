@@ -153,6 +153,27 @@ export default class BarbershopsService {
       throw error
     }
   }
+
+  async getBarberSchedules(barberId) {
+    try {
+      const url = `${process.env.API_URL}/barbers/${barberId}/schedules`;
+      const resp = await fetch(url, {
+        headers: {
+          "Accept": "application/json"
+        },
+        method: "GET"
+      });
+      const json = await resp.json();
+      if (json.success) {
+        return json.schedules;
+      } else {
+        throw new Error("Unable to get barber schedules");
+      }
+    } catch (error) {
+      throw error;
+    }
+  }
+  
   // async doRegister(name, surname, email, password) {
   //   try {
   //     const url = process.env.API_URL + "/register"; // Suponiendo que la ruta correcta para el registro es '/register'

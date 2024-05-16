@@ -1,29 +1,28 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext } from 'react';
 import Layout from '../../components/Layout';
 import Logger from '../../library/Logger';
 import useServicesContext from '../../hooks/useServicesContext';
+import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import { Button, Table } from 'react-bootstrap';
 import UserContext from '../../contexts/UserContext';
-import { Calendar, momentLocalizer } from 'react-big-calendar';
-import moment from 'moment';
-import "react-big-calendar/lib/css/react-big-calendar.css";
-
-const localizer = momentLocalizer(moment);
-
+import DatePicker from 'react-datepicker';
+import "react-datepicker/dist/react-datepicker.css";
 
 export default function BarbershopView() {
+
   Logger.debug("BarbershopView page");
 
   const { id } = useParams();
   const { bsService, userService } = useServicesContext();
   const [barbershop, setBarbershop] = useState(null);
   const [barbers, setBarbers] = useState(null);
-  const [events, setEvents] = useState([]);
 	const navigate = useNavigate()
-  const { authToken, profile, setProfile  } = useContext(UserContext)
+  const { authToken, user, profile, setProfile  } = useContext(UserContext)
+  const [selectedDay, setSelectedDay] = useState(new Date()); 
+
 
   useEffect(() => {
     if (!authToken) {
@@ -40,10 +39,6 @@ export default function BarbershopView() {
 
         const userData = await userService.getOne(authToken);
         setProfile(userData.user);
-
-        const events = await getBarberEvents(barbersData.data);
-        setEvents(events);
-
       } catch (error) {
         Logger.error(error.message);
         alert("ERROR cargando barbería... :-(");
@@ -51,24 +46,6 @@ export default function BarbershopView() {
     })();
   }, [id]);
 
-  const getBarberEvents = async (barbers) => {
-    let events = [];
-    for (const barber of barbers) {
-      const schedules = await bsService.getBarberSchedules(barber.id);
-      if (schedules && schedules.length > 0) {
-        schedules.forEach(schedule => {
-          events.push({
-            title: `${barber.user.name} ${barber.user.surname}`,
-            start: new Date(schedule.start_time),
-            end: new Date(schedule.end_time),
-          });
-        });
-      }
-    }
-    return events;
-  };
-  
-  
   const handleDeleteBarber = async (barberId) => {
     try {
       await bsService.quitBarber(barberId);
@@ -89,8 +66,25 @@ export default function BarbershopView() {
     }
   };
 
-  const availableBarbers = barbers && barbers.filter(barber => barber.barbershop_id === null);
+  const handleDayChange = (date) => {
+    setSelectedDay(date);
+  };
+  
+const isDayAvailable = () => {
+  if (selectedDay && barbershop && barbers) {
+    const barber = barbers.find(b => b.barbershop_id === barbershop.id);
+    if (barber && barber.schedules) {
+      // Obtener el día de la semana en el formato de barber_schedules (1 para Lunes, 7 para Domingo)
+      const dayOfWeek = selectedDay.getDay() === 0 ? 7 : selectedDay.getDay(); // Convertir Domingo (0) a 7
+      
+      // Verificar si hay algún horario para el día seleccionado
+      return barber.schedules.some(schedule => schedule.day_of_week === dayOfWeek);
+    }
+  }
+  return false;
+};
 
+ 
   return (
     <Layout>
       <section id="barbershop" className="w-75 m-auto">
@@ -105,7 +99,7 @@ export default function BarbershopView() {
                   <Table className='mb-5' striped bordered hover>
                     <thead>
                       <tr>
-                        <th>#</th>
+                        <th>#</th>  
                         <th>Nombre</th>
                         <th>Apellido</th>
                         <th>Email</th>
@@ -144,31 +138,32 @@ export default function BarbershopView() {
                       </tr>
                     </thead>
                     <tbody>
-                      {availableBarbers && availableBarbers.map((barber, index) => (
-                        <tr key={index}>
-                          <td>{barber.id}</td>
-                          <td>{barber.user.name}</td>
-                          <td>{barber.user.surname}</td>
-                          <td>{barber.user.email}</td>
-                          <td>
-                            <Button variant="success" onClick={() => handleAddBarber(barber.id)}>Añadir</Button>
-                          </td>
-                        </tr>
-                      ))}
+                      {barbers && barbers.map((barber, index) => {
+                        if (barber.barbershop_id === null) {
+                          return (
+                            <tr key={index}>
+                              <td>{barber.id}</td>
+                              <td>{barber.user.name}</td>
+                              <td>{barber.user.surname}</td>
+                              <td>{barber.user.email}</td>
+                              <td>
+                                <Button variant="success" onClick={() => handleAddBarber(barber.id)}>Añadir</Button>
+                              </td>
+                            </tr>
+                          );
+                        } else {
+                          return null;
+                        }
+                      })}
                     </tbody>
                   </Table>
                 </div>
               ) : (
                 <div className="col-md-6">
                   <h3>Calendario</h3>
-                  <Calendar
-                  localizer={localizer}
-                  events={events}
-                  startAccessor="start"
-                  endAccessor="end"
-                  style={{ height: 500 }}
-                  />
-                  <h3>Barberos asignados a esta barbería:</h3>
+                  <DatePicker selected={selectedDay} onChange={handleDayChange} />
+                  {isDayAvailable() && <div className="availability-box">Puedes seleccionar este día</div>}
+                  <h3 className="mt-4">Barberos</h3>
                   <div>
                     {barbers && barbers.map((barber, index) => {
                       if (barber.barbershop_id === barbershop.id) {

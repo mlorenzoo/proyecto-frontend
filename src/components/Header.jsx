@@ -1,40 +1,39 @@
-import { Container, Nav, Navbar, Button } from 'react-bootstrap'
-import Logger from '../library/Logger'
-import { useLocation, useNavigate, Link } from 'react-router-dom'
-import useUserContext from '../hooks/useUserContext'
-import useServicesContext from '../hooks/useServicesContext'
-import { useState, useEffect } from 'react'
-import { Image } from 'react-bootstrap'
+import { Container, Nav, Navbar, Button, Image } from 'react-bootstrap';
+import Logger from '../library/Logger';
+import { useLocation, useNavigate, Link } from 'react-router-dom';
+import useUserContext from '../hooks/useUserContext';
+import useServicesContext from '../hooks/useServicesContext';
+import { useState, useEffect } from 'react';
+import defaultProfilePic from '../assets/default.jpg';  // Asegúrate de que la ruta sea correcta
 
 export function Header() {
-
-  Logger.debug("Header component")
-  const location = useLocation()
-  const navigate = useNavigate()
-  const [profile, setProfile] = useState({})
-  const { authToken, setAuthToken, user, setUser } = useUserContext()
-  const { authService, userService, lSessionService, sSessionService } = useServicesContext()
+  Logger.debug("Header component");
+  const location = useLocation();
+  const navigate = useNavigate();
+  const [profile, setProfile] = useState({});
+  const { authToken, setAuthToken, user, setUser } = useUserContext();
+  const { authService, userService, lSessionService, sSessionService } = useServicesContext();
 
   async function handleLogout() {
-    Logger.debug("User logout")
+    Logger.debug("User logout");
     // Auth
     try {
       const success = await authService.doLogout(authToken);
       // Session
       if (success) {
         const sessionService = user.remember ? lSessionService : sSessionService;
-        sessionService.destroySession()
+        sessionService.destroySession();
         // State
-        setAuthToken(null)
-        setUser(null)
+        setAuthToken(null);
+        setUser(null);
         // Redirect
-        navigate("/")
+        navigate("/");
       } else {
-        alert("No")
+        alert("No");
       }
     } catch (error) {
-      Logger.error(error.message)
-      alert("Hoia")
+      Logger.error(error.message);
+      alert("Hoia");
     }
   }
 
@@ -42,16 +41,16 @@ export function Header() {
     (async () => {
       // Auth 
       try {
-        const data = await userService.getOne(authToken)
+        const data = await userService.getOne(authToken);
         console.log(data);
-        setProfile(data.user)
-        return data
+        setProfile(data.user);
+        return data;
       } catch (error) {
-        Logger.error(error.message)
+        Logger.error(error.message);
       }
-    })()
-  }, [])
-  console.log(profile)
+    })();
+  }, [authToken]);
+  console.log(profile);
 
   return (
     <header>
@@ -95,33 +94,31 @@ export function Header() {
                     </>
                   )}
 
-                  {/* Ocultar imagen en dispositivos pequeños */}
-                  <div className="d-none d-md-block">
-                    {profile.pfp && (
+                  <div className="d-none d-md-block d-flex align-items-center">
+                    <Link to="/profile">
                       <Image
-                        src={`http://localhost:8000/storage/${profile.pfp}`}
+                        src={profile.pfp ? `http://localhost:8000/storage/${profile.pfp}` : defaultProfilePic}
                         roundedCircle
                         style={{ width: '40px', height: '40px', marginRight: '10px' }}
                       />
-                    )}
+                    </Link>
+                    <Button variant="danger" onClick={handleLogout}>Desconnectar</Button>
                   </div>
-
-                  <Button variant="danger" onClick={handleLogout}>Desconnectar</Button>
                 </>
               ) : (
-                  <>
-                    <Button as={Link} to="/login" variant="primary" className='custom-button'>
-                      INICIAR SESIÓN
-                    </Button>
-                    <Button as={Link} to="/register" variant="secondary" className='custom-button'>
-                      ÚNETE YA
-                    </Button>
-                  </>
-                )}
+                <>
+                  <Button as={Link} to="/login" variant="primary" className='custom-button'>
+                    INICIAR SESIÓN
+                  </Button>
+                  <Button as={Link} to="/register" variant="secondary" className='custom-button'>
+                    ÚNETE YA
+                  </Button>
+                </>
+              )}
             </Nav>
           </Navbar.Collapse>
         </Container>
       </Navbar>
     </header>
-  )
+  );
 }

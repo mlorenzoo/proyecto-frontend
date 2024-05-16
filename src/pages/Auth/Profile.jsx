@@ -5,6 +5,7 @@ import useServicesContext from '../../hooks/useServicesContext'
 import { useState, useEffect } from 'react'
 import { Image, Button } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
+import defaultProfilePictur from '../../assets/default.jpg'
 
 export default function Profile() {
 
@@ -41,7 +42,7 @@ export default function Profile() {
                         <Image 
                             roundedCircle 
                             style={{ maxWidth: '200px', maxHeight: '200px', marginBottom: '20px' }}
-                            src={`http://localhost:8000/storage/${profile.pfp}`} 
+                            src={profile.pfp ? `http://localhost:8000/storage/${profile.pfp}` : defaultProfilePictur} 
                             alt="Imagen de perfil" 
                             className="me-lg-4 mb-4 mb-lg-0"
                         />

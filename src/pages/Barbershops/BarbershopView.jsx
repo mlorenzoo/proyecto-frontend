@@ -10,6 +10,7 @@ import UserContext from '../../contexts/UserContext';
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 
+
 export default function BarbershopView() {
   Logger.debug("BarbershopView page");
 
@@ -19,7 +20,7 @@ export default function BarbershopView() {
   const navigate = useNavigate();
 
   const [barbershop, setBarbershop] = useState(null);
-  const [barbers, setBarbers] = useState(null);
+  const [barbers, setBarbers] = useState([]);
   const [selectedBarber, setSelectedBarber] = useState(null);
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [availableAppointments, setAvailableAppointments] = useState([]);
@@ -28,6 +29,7 @@ export default function BarbershopView() {
   useEffect(() => {
     if (!authToken) {
       navigate('/unauthorized');
+      return;
     }
 
     (async () => {
@@ -36,7 +38,7 @@ export default function BarbershopView() {
         setBarbershop(barbershopData);
 
         const barbersData = await bsService.getBarbers();
-        setBarbers(barbersData.data);
+        setBarbers(Array.isArray(barbersData.data) ? barbersData.data : []);
 
       } catch (error) {
         Logger.error(error.message);
@@ -56,11 +58,35 @@ export default function BarbershopView() {
     if (selectedBarber) {
       try {
         const response = await bsService.getAvailableAppointments(selectedBarber, date);
-        setAvailableAppointments(response.data);
+        setAvailableAppointments(Array.isArray(response.data) ? response.data : []);
       } catch (error) {
-        Logger.error(error.message);
+        Logger.error(error);
         alert("ERROR cargando citas disponibles... :-(");
       }
+    }
+  };
+
+  const handleAddBarber = async (barberId) => {
+    try {
+      await bsService.addBarberToBarbershop(barberId, barbershop.id);
+      // Actualiza la lista de barberos después de añadir uno nuevo
+      const updatedBarbers = await bsService.getBarbers();
+      setBarbers(Array.isArray(updatedBarbers.data) ? updatedBarbers.data : []);
+    } catch (error) {
+      Logger.error(error.message);
+      alert("ERROR añadiendo barbero... :-(");
+    }
+  };
+
+  const handleDeleteBarber = async (barberId) => {
+    try {
+      await bsService.quitBarber(barberId);
+      // Actualiza la lista de barberos después de eliminar uno
+      const updatedBarbers = await bsService.getBarbers();
+      setBarbers(Array.isArray(updatedBarbers.data) ? updatedBarbers.data : []);
+    } catch (error) {
+      Logger.error(error.message);
+      alert("ERROR eliminando barbero... :-(");
     }
   };
 
@@ -86,8 +112,7 @@ export default function BarbershopView() {
                       </tr>
                     </thead>
                     <tbody>
-                      {barbers && barbers.map((barber, index) => {
-                        console.log("Barber:", barber.barbershop_id); 
+                      {barbers.map((barber, index) => {
                         if (barber.barbershop_id === barbershop.id) {
                           return (
                             <tr key={index}>
@@ -118,8 +143,7 @@ export default function BarbershopView() {
                       </tr>
                     </thead>
                     <tbody>
-                      {barbers && barbers.map((barber, index) => {
-                        console.log("Barber:", barber.barbershop_id); 
+                      {barbers.map((barber, index) => {
                         if (barber.barbershop_id === null && barber.user.role !== "Admin") {
                           return (
                             <tr key={index}>
@@ -133,7 +157,7 @@ export default function BarbershopView() {
                             </tr>
                           );
                         } else {
-                          return null; // No hacer nada si barber.user.barbershop_id no es null
+                          return null;
                         }
                       })}
                     </tbody>
@@ -141,43 +165,43 @@ export default function BarbershopView() {
                 </div>
               ) : (
                 <div className="col-md-6">
-                <h3>Seleccionar barbero</h3>
-                <p>Selecciona un barbero:</p>
-                {barbers && barbers.map((barber) => (
-                  <Button
-                    key={barber.id}
-                    variant={selectedBarber === barber.id ? "primary" : "secondary"}
-                    onClick={() => handleBarberSelection(barber.id)}
-                    className="mr-2 mb-2"
-                  >
-                    {barber.user.name} {barber.user.surname}
-                  </Button>
-                ))}
-              </div>
-            )}
-            {showCalendar && (
-              <div className="col-md-6">
-                <h3>Calendario</h3>
-                <p>Selecciona una fecha:</p>
-                <DatePicker
-                  selected={selectedDate}
-                  onChange={date => handleDateSelection(date)}
-                  dateFormat="dd/MM/yyyy"
-                />
-              </div>
-            )}
-            {availableAppointments.length > 0 && (
-              <div className="row mt-4">
-                <div className="col-md-12">
-                  <h3>Citas disponibles</h3>
-                  <ul>
-                    {availableAppointments.map((appointment, index) => (
-                      <li key={index}>{appointment.time}</li>
-                    ))}
-                  </ul>
+                  <h3>Seleccionar barbero</h3>
+                  <p>Selecciona un barbero:</p>
+                  {barbers.map((barber) => (
+                    <Button
+                      key={barber.id}
+                      variant={selectedBarber === barber.id ? "primary" : "secondary"}
+                      onClick={() => handleBarberSelection(barber.id)}
+                      className="mr-2 mb-2"
+                    >
+                      {barber.user.name} {barber.user.surname}
+                    </Button>
+                  ))}
                 </div>
-              </div>
-            )}
+              )}
+              {showCalendar && (
+                <div className="col-md-6">
+                  <h3>Calendario</h3>
+                  <p>Selecciona una fecha:</p>
+                  <DatePicker
+                    selected={selectedDate}
+                    onChange={date => handleDateSelection(date)}
+                    dateFormat="dd/MM/yyyy"
+                  />
+                </div>
+              )}
+              {availableAppointments.length > 0 && (
+                <div className="row mt-4">
+                  <div className="col-md-12">
+                    <h3>Citas disponibles</h3>
+                    <ul>
+                      {availableAppointments.map((appointment, index) => (
+                        <li key={index}>{appointment.time}</li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              )}
               <div>
                 <h3>Dirección</h3>
                 <p>{barbershop.ubication}</p>
@@ -195,7 +219,7 @@ export default function BarbershopView() {
                 </MapContainer>
               </div>
             </div>
-        </>
+          </>
         ) : (
           <p>Cargando barbería...</p>
         )}

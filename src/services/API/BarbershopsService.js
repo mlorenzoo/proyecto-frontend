@@ -176,23 +176,23 @@ export default class BarbershopsService {
 
   async getAvailableAppointments(barberId, date) {
     try {
-      const url = `${process.env.API_URL}/appointments/available?barber_id=${barberId}&date=${date}`;
-      const resp = await fetch(url, {
-        headers: {
-          "Accept": "application/json"
-        },
-        method: "GET"
-      });
-      const json = await resp.json();
-      if (json.success) {
-        return json.available_hours;
-      } else {
-        throw new Error("Unable to get available appointments");
-      }
+        const response = await fetch(`/api/appointments/available?barber_id=${barberId}&date=${date.toISOString()}`, {
+            headers: {
+                Authorization: `Bearer ${authToken}`,
+            },
+        });
+        if (!response.ok) {
+            throw new Error('Failed to fetch available appointments');
+        }
+        const data = await response.json();
+        return data;
     } catch (error) {
-      throw error;
+        Logger.error("Error in getAvailableAppointments: ", error);
+        throw error;
     }
-  }  
+}
+
+  
   
   // async doRegister(name, surname, email, password) {
   //   try {

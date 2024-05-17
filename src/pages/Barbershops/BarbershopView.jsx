@@ -1,5 +1,4 @@
 import React, { useContext, useState, useEffect } from 'react';
-import React, { useContext, useState, useEffect } from 'react';
 import Layout from '../../components/Layout';
 import Logger from '../../library/Logger';
 import useServicesContext from '../../hooks/useServicesContext';

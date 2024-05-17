@@ -46,8 +46,7 @@ export default function EditarUsuario() {
 		// Auth
 		try {
 			const editedData = {};
-			const formData = new FormData();
-			
+
 			// Agregar solo los campos modificados al objeto editedData
 			if (data.name !== '' && data.name !== profile.name) {
 				editedData.name = data.name;
@@ -71,13 +70,17 @@ export default function EditarUsuario() {
 			if (data.password !== '' && data.password !== profile.password) {
 				editedData.password = data.password;
 			}
-			if (data.pfp instanceof File) {
-				formData.append('pfp', data.pfp);
-			}
-			console.log(data.pfp)
-			console.log(formData)
 			await userService.doEdit(profile.id, editedData, authToken);
-			// const pfp = await userService.updateProfilePicture(profile.id, formData)
+
+			// Edit image
+			console.log(data.pfp)
+			if (data.pfp) {
+				const formData = new FormData();
+				formData.append('pfp', data.pfp[0]);
+				console.log(formData)
+				const success = await userService.updateProfilePicture(profile.id, formData)
+			}
+
 			alert("Usuario editado con éxito!");
 			if (user.role === 'Admin') {
 				navigate("/users");
@@ -105,7 +108,7 @@ export default function EditarUsuario() {
   	return (
 		<Layout>
 			<section id="login" className="w-75 m-auto">
-			<h2>Editar usuario "{profile.name}"</h2>
+			<h2 className='mt-5'>Editar usuario "{profile.name}"</h2>
 			<Formik
 				validationSchema={schema}
 				onSubmit={onSubmit}
@@ -152,7 +155,7 @@ export default function EditarUsuario() {
 					</Form.Control.Feedback>
 				</Form.Group>
           <Form.Group className="mb-3" controlId="formEmail">
-					<Form.Label>Correo electrónico</Form.Label>
+					<Form.Label htmlFor='formFile'>Correo electrónico</Form.Label>
 					<Form.Control
 					value={values.email}
 					type="email"
@@ -221,11 +224,7 @@ export default function EditarUsuario() {
 					<Form.Control
 							type="file"
 							name="pfp"
-							onChange={(event) => {
-									const file = event.currentTarget.files[0];
-									handleChange(event);
-									setFieldValue("pfp", file);
-							}}
+							onChange={handleChange}
 							isInvalid={!!errors.pfp}
 					/>
 					<Form.Control.Feedback type="invalid">
@@ -246,7 +245,7 @@ export default function EditarUsuario() {
 					{errors.phone}
 					</Form.Control.Feedback>
 				</Form.Group>
-				<Button variant="primary" type="submit">
+				<Button className='mb-5' variant="primary" type="submit">
 					EDITAR USUARIO
 				</Button>
         	</Form>

@@ -22,6 +22,7 @@ import BarbershopList from './pages/Barbershops/BarbershopList'
 import BarbershopView from './pages/Barbershops/BarbershopView'
 import PayPalButton from './PayPalButton'
 import Unauthorized from './pages/Unauthorized'
+import AppointmentsSwitch from './pages/Appointments/AppointmentsSwitch'
 
 function App() {
 
@@ -58,6 +59,7 @@ function App() {
           <Route path="/barbershops/:id" element={<BarbershopView />} />
           <Route path="/unauthorized" element={<Unauthorized />} />
           <Route element={<PayPalButton />} />
+          <Route path="/appointments" element={<AppointmentsSwitch />} />
         </Routes>
       </UserContextProvider>
     </ServicesContextProvider>

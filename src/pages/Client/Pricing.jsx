@@ -15,7 +15,6 @@ const Pricing = () => {
   const [isSub, setIsSub] = useState([]);
   const { authToken } = useContext(UserContext);
   const { user } = useContext(UserContext);
-  const { order } = useContext(UserContext);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -73,7 +72,7 @@ const Pricing = () => {
       <section id="pricing" className="container">
         <div className="row justify-content-center">
           <div className="col-md-8 text-center">
-            <h1>Elige tu experiencia de CORTE-Z</h1>
+            <h1 className="mt-5">Elige tu experiencia de CORTE-Z</h1>
             <p>Cortes exclusivos, comodidad sin igual. Únete a la experiencia de suscripción</p>
           </div>
         </div>
@@ -94,7 +93,11 @@ const Pricing = () => {
                     </small>
                   </h1>
                   <p>{subscription.description}</p>
-                  {isSub ? (
+                  {profile.role !== 'Cliente' ? (
+                    <div className="alert alert-warning">
+                      Planes disponibles actualmente
+                    </div>
+                  ) : isSub ? (
                     <div className="alert alert-info">
                       Ya estás suscrito a nuestros servicios
                     </div>

@@ -66,23 +66,23 @@ export function Header() {
                     <>
                       <Nav.Link as={Link} to="/nuevo-usuario" eventKey={"/products"}>NUEVO USUARIO</Nav.Link>
                       <Nav.Link as={Link} to="/users" eventKey={"/users"}>LISTA USUARIOS</Nav.Link>
-                      <Nav.Link as={Link} to="/subscriptions" eventKey={"/subscriptions"}>SUBSCRIPTIONS</Nav.Link>
-                      <Nav.Link as={Link} to="/profile">{profile.name} {profile.role}</Nav.Link>
+                      <Nav.Link as={Link} to="/subscriptions" eventKey={"/subscriptions"}>SUSCRIPCIONES</Nav.Link>
+                      <Nav.Link as={Link} to="/profile">{profile.name}</Nav.Link>
                     </>
                   )}
 
                   {profile.role === "Gestor" && (
                     <>
                       <Nav.Link as={Link} to="/barbershops" eventKey={"/barbershops"}>BARBERÍAS</Nav.Link>
-                      <Nav.Link as={Link} to="/users" eventKey={"/users"}>Gestor</Nav.Link>
-                      <Nav.Link as={Link} to="/profile">{profile.role}</Nav.Link>
+                      <Nav.Link as={Link} to="/nuevo-usuario" eventKey={"/nuevo-usuario"}>NUEVO BARBERO</Nav.Link>
+                      <Nav.Link as={Link} to="/profile">{profile.name}</Nav.Link>
                     </>
                   )}
 
                   {profile.role === "Barbero" && (
                     <>
                       <Nav.Link as={Link} to="/barbershops" eventKey={"/barbershops"}>BARBERÍAS</Nav.Link>
-                      <Nav.Link as={Link} to="/profile">{profile.role}</Nav.Link>
+                      <Nav.Link as={Link} to="/profile">{profile.name}</Nav.Link>
                     </>
                   )}
 
@@ -90,20 +90,18 @@ export function Header() {
                     <>
                       <Nav.Link as={Link} to="/pricing" eventKey={"/PLANES"}>PLANES</Nav.Link>
                       <Nav.Link as={Link} to="/barbershops" eventKey={"/barbershops"}>BARBERÍAS</Nav.Link>
-                      <Nav.Link as={Link} to="/profile">PERFIL</Nav.Link>
+                      <Nav.Link as={Link} to="/profile">{profile.name}</Nav.Link>
                     </>
                   )}
 
-                  <div className="d-none d-md-block d-flex align-items-center">
-                    <Link to="/profile">
-                      <Image
-                        src={profile.pfp ? `http://localhost:8000/storage/${profile.pfp}` : defaultProfilePic}
-                        roundedCircle
-                        style={{ width: '40px', height: '40px', marginRight: '10px' }}
-                      />
-                    </Link>
-                    <Button variant="danger" onClick={handleLogout}>Desconnectar</Button>
-                  </div>
+                  <Link to="/profile" className="d-none d-md-flex align-items-center">
+                    <Image
+                      src={profile.pfp ? `http://localhost:8000/storage/${profile.pfp}` : defaultProfilePic}
+                      roundedCircle
+                      style={{ width: '40px', height: '40px', marginRight: '10px' }}
+                    />
+                  </Link>
+                  <Button variant="danger" onClick={handleLogout} className="ms-2">Desconectar</Button>
                 </>
               ) : (
                 <>

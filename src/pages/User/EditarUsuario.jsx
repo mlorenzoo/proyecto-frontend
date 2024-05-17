@@ -77,7 +77,7 @@ export default function EditarUsuario() {
 			console.log(data.pfp)
 			console.log(formData)
 			await userService.doEdit(profile.id, editedData, authToken);
-			const pfp = await userService.updateProfilePicture(profile.id, formData)
+			// const pfp = await userService.updateProfilePicture(profile.id, formData)
 			alert("Usuario editado con éxito!");
 			if (user.role === 'Admin') {
 				navigate("/users");
@@ -90,8 +90,6 @@ export default function EditarUsuario() {
 		}
 	}
 	
-	
-
     const schema = Yup.object().shape({
 			name: Yup.string(),
 			surname: Yup.string(),
@@ -153,7 +151,7 @@ export default function EditarUsuario() {
 					{errors.surname}
 					</Form.Control.Feedback>
 				</Form.Group>
-          		<Form.Group className="mb-3" controlId="formEmail">
+          <Form.Group className="mb-3" controlId="formEmail">
 					<Form.Label>Correo electrónico</Form.Label>
 					<Form.Control
 					value={values.email}

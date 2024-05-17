@@ -177,6 +177,7 @@ export default class BarbershopsService {
   async getAvailableAppointments(barberId, date) {
     try {
       const url = `${process.env.API_URL}/barbers/${barberId}/appointments?date=${date}`;
+      console.log(url)
       const resp = await fetch(url, {
         headers: {
           "Accept": "application/json"
@@ -184,7 +185,8 @@ export default class BarbershopsService {
         method: "GET"
       });
       const json = await resp.json();
-      if (json.success) {
+      console.log(json.available_hours)
+      if (json) {
         return json.available_hours;
       } else {
         throw new Error("Unable to get available appointments");

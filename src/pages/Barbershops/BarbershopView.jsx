@@ -10,7 +10,6 @@ import UserContext from '../../contexts/UserContext';
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 
-
 export default function BarbershopView() {
   Logger.debug("BarbershopView page");
 
@@ -39,7 +38,6 @@ export default function BarbershopView() {
 
         const barbersData = await bsService.getBarbers();
         setBarbers(Array.isArray(barbersData.data) ? barbersData.data : []);
-
       } catch (error) {
         Logger.error(error.message);
         alert("ERROR cargando barbería... :-(");
@@ -54,17 +52,17 @@ export default function BarbershopView() {
 
   const handleDateSelection = async (date) => {
     setSelectedDate(date);
-
+  
     if (selectedBarber) {
       try {
-        const response = await bsService.getAvailableAppointments(selectedBarber, date);
-        setAvailableAppointments(Array.isArray(response.data) ? response.data : []);
+        const response = await bsService.getAvailableAppointments(selectedBarber, date.toISOString().split('T')[0]);
+        setAvailableAppointments(Array.isArray(response.data.available_hours) ? response.data.available_hours : []);
       } catch (error) {
         Logger.error(error);
         alert("ERROR cargando citas disponibles... :-(");
       }
     }
-  };
+  };  
 
   const handleAddBarber = async (barberId) => {
     try {
@@ -196,7 +194,7 @@ export default function BarbershopView() {
                     <h3>Citas disponibles</h3>
                     <ul>
                       {availableAppointments.map((appointment, index) => (
-                        <li key={index}>{appointment.time}</li>
+                        <li key={index}>{appointment}</li>
                       ))}
                     </ul>
                   </div>

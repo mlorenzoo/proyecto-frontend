@@ -18,7 +18,7 @@ const NewBarbershop = () => {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        if (!authToken || profile.role !== 'Gestor') {
+        if (!authToken || profile.role !== 'Gestor' && profile.role !== 'Admin') {
           navigate('/unauthorized');
         }
 
@@ -111,9 +111,11 @@ const NewBarbershop = () => {
                   {errors.address}
                 </Form.Control.Feedback>
               </Form.Group>
-              <Button variant="primary" type="submit">
-                CREAR BARBERÍA
-              </Button>
+              {profile && profile.role === 'Gestor' && (
+                <Button variant="primary" type="submit">
+                  CREAR BARBERÍA
+                </Button>
+              )}
             </Form>
           )}
         </Formik>

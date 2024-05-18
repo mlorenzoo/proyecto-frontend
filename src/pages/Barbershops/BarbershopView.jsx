@@ -217,7 +217,7 @@ export default function BarbershopView() {
                   </div>
                 </>
               )}
-              {showCalendar && (
+              {profile && profile.role === "Cliente" && showCalendar && (
                 <div className="col-md-6">
                   <h3>Calendario</h3>
                   <p>Selecciona una fecha:</p>
@@ -228,7 +228,7 @@ export default function BarbershopView() {
                   />
                 </div>
               )}
-              {availableAppointments.length > 0 && (
+              {profile && profile.role === "Cliente" && availableAppointments.length > 0 && (
                 <div className="row mt-4">
                   <div className="col-md-12">
                     <h3>Citas disponibles</h3>

@@ -3,7 +3,7 @@ import Logger from '../../library/Logger'
 import useServicesContext from '../../hooks/useServicesContext'
 import { useState, useEffect, useContext } from 'react'
 import { Button, Form, Row, Col, Table, Modal } from 'react-bootstrap'
-import { Link, useSearchParams } from 'react-router-dom' 
+import { Link, useSearchParams } from 'react-router-dom'
 import UserContext from '../../contexts/UserContext'
 import { useNavigate } from 'react-router-dom'
 
@@ -13,42 +13,55 @@ export default function UserList() {
 
 	const { userService } = useServicesContext()
 	const handleCloseModal = () => {
-    setShowModal(false);
-    setUserToDelete(null);
-  };
+		setShowModal(false);
+		setUserToDelete(null);
+	};
 	const [users, setUsers] = useState(null)
 	const [showModal, setShowModal] = useState(false)
 	const [userToDelete, setUserToDelete] = useState(null)
-	const { authToken, user, profile, setProfile } = useContext(UserContext)
+	const { authToken, profile, setProfile } = useContext(UserContext)
 	const navigate = useNavigate()
 
 	const [queryParams, setQueryParams] = useSearchParams();
 
 	useEffect(() => {
-		if (!authToken || profile.role !== 'Admin') {
-			navigate('/unauthorized');
-		}
-		(async () => {
-			try {
-				const data = await userService.getAll()
-				console.log(data);
-				setUsers(data)
-
-				const userData = await userService.getOne(authToken)
-				setProfile(userData.user)
-				return data
-			} catch (error) {
-				Logger.error(error.message)
-				alert("ERROR carregant llistat... :-(")
-			}
-		})()
-	}, [queryParams, authToken, navigate])
-
-	useEffect(() => {
 		if (!authToken) {
 			navigate('/unauthorized');
 		}
-	}, [authToken, navigate]);
+
+		const fetchProfile = async () => {
+			try {
+				const userData = await userService.getOne(authToken)
+				setProfile(userData.user)
+
+				// Redirigir si el usuario no es Admin o Gestor
+				if (userData.user.role !== 'Admin' && userData.user.role !== 'Gestor') {
+					navigate('/unauthorized');
+				}
+			} catch (error) {
+				Logger.error(error.message)
+				alert("ERROR cargando perfil... :-(")
+			}
+		};
+
+		const fetchUsers = async () => {
+			try {
+				const data = await userService.getAll()
+				console.log(data);
+				if (profile.role === 'Admin') {
+					setUsers(data)
+				} else if (profile.role === 'Gestor') {
+					const filteredUsers = data.filter(user => user.role === 'Barbero');
+					setUsers(filteredUsers)
+				}
+			} catch (error) {
+				Logger.error(error.message)
+				alert("ERROR cargando listado... :-(")
+			}
+		};
+
+		fetchProfile().then(() => fetchUsers());
+	}, [queryParams, authToken, navigate, profile.role, userService, setProfile])
 
 	const handleSubmit = (event) => {
 		event.preventDefault();

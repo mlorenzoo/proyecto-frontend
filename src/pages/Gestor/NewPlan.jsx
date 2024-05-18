@@ -14,7 +14,7 @@ const NewPlan = () => {
   const { authToken, user, profile, setProfile  } = useContext(UserContext)
 
   useEffect(() => {
-    if (!authToken || profile.role !== "Gestor") {
+    if (!authToken || profile.role !== 'Gestor' && profile.role !== 'Admin') {
       navigate('/unauthorized');
     }
   }, [])
@@ -118,9 +118,11 @@ const NewPlan = () => {
                   {errors.duration}
                 </Form.Control.Feedback>
               </Form.Group>
-              <Button variant="primary" type="submit">
-                CREAR PLAN
-              </Button>
+              {profile && profile.role === 'Gestor' && (
+                <Button variant="primary" type="submit">
+                  CREAR PLAN
+                </Button>
+              )}
             </Form>
           )}
         </Formik>

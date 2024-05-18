@@ -26,7 +26,9 @@ const Pricing = () => {
 
         const data = await subsService.getSubs();
         setSubscriptions(data);
-
+        if (dataUser.user.role !== 'Cliente' && dataUser.user.role !== 'Admin') {
+          navigate('/unauthorized');
+        }
         const client = await userService.getClient(dataUser.user.id);
         setClientId(client);
 
@@ -93,7 +95,7 @@ const Pricing = () => {
                     </small>
                   </h1>
                   <p>{subscription.description}</p>
-                  {profile.role !== 'Cliente' ? (
+                  {profile.role === 'Admin' ? (
                     <div className="alert alert-warning">
                       Planes disponibles actualmente
                     </div>

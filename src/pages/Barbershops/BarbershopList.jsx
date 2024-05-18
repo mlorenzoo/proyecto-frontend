@@ -133,7 +133,7 @@ export default function BarbershopList() {
                     <Link to={`/barbershops/${barbershop.id}`}>
                       <Button variant="primary" onClick={() => handleDetailsClick(barbershop.id)}>Ver detalles</Button>
                     </Link>
-                    {profile && profile.role === "Gestor" && (
+                    {profile && profile.role === "Gestor" && profile.id === barbershop.gestor_id && (
                     <Button variant="danger" onClick={() => handleShowModal(barbershop)}>Eliminar</Button>
                     )}
                   </Card.Body>

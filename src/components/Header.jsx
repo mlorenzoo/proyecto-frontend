@@ -67,6 +67,8 @@ export function Header() {
                       <Nav.Link as={Link} to="/nuevo-usuario" eventKey={"/products"}>NUEVO USUARIO</Nav.Link>
                       <Nav.Link as={Link} to="/users" eventKey={"/users"}>LISTA USUARIOS</Nav.Link>
                       <Nav.Link as={Link} to="/subscriptions" eventKey={"/subscriptions"}>SUSCRIPCIONES</Nav.Link>
+                      <Nav.Link as={Link} to="/barbershops" eventKey={"/barbershops"}>BARBERÍAS</Nav.Link>
+                      <Nav.Link as={Link} to="/pricing" eventKey={"/PLANES"}>PLANES</Nav.Link>
                       <Nav.Link as={Link} to="/profile">{profile.name}</Nav.Link>
                     </>
                   )}
@@ -75,6 +77,7 @@ export function Header() {
                     <>
                       <Nav.Link as={Link} to="/barbershops" eventKey={"/barbershops"}>BARBERÍAS</Nav.Link>
                       <Nav.Link as={Link} to="/nuevo-usuario" eventKey={"/nuevo-usuario"}>NUEVO BARBERO</Nav.Link>
+                      <Nav.Link as={Link} to="/users" eventKey={"/users"}>LISTA BARBEROS</Nav.Link>
                       <Nav.Link as={Link} to="/profile">{profile.name}</Nav.Link>
                     </>
                   )}

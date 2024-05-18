@@ -23,6 +23,8 @@ import BarbershopView from './pages/Barbershops/BarbershopView'
 import PayPalButton from './PayPalButton'
 import Unauthorized from './pages/Unauthorized'
 import AppointmentsSwitch from './pages/Appointments/AppointmentsSwitch'
+import { PastAppointments } from './pages/Appointments/PastAppointments'
+import { UpcomingAppointments } from './pages/Appointments/UpcomingAppointments'
 
 function App() {
 
@@ -60,6 +62,8 @@ function App() {
           <Route path="/unauthorized" element={<Unauthorized />} />
           <Route element={<PayPalButton />} />
           <Route path="/appointments" element={<AppointmentsSwitch />} />
+          <Route element={<PastAppointments />} />
+          <Route element={<UpcomingAppointments />} />
         </Routes>
       </UserContextProvider>
     </ServicesContextProvider>

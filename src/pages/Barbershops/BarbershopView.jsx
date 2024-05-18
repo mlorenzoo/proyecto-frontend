@@ -5,25 +5,29 @@ import useServicesContext from '../../hooks/useServicesContext';
 import { useNavigate, useParams } from 'react-router-dom';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
-import { Button, Table } from 'react-bootstrap';
+import { Button, Table, Alert } from 'react-bootstrap';
 import UserContext from '../../contexts/UserContext';
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
+import { ArraySchema } from 'yup';
 
 export default function BarbershopView() {
   Logger.debug("BarbershopView page");
 
   const { id } = useParams();
-  const { bsService } = useServicesContext();
+  const { bsService, userService } = useServicesContext();
   const { authToken, profile } = useContext(UserContext);
   const navigate = useNavigate();
 
   const [barbershop, setBarbershop] = useState(null);
   const [barbers, setBarbers] = useState([]);
+  const [clientId, setClientId] = useState([]);
   const [selectedBarber, setSelectedBarber] = useState(null);
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [availableAppointments, setAvailableAppointments] = useState([]);
   const [showCalendar, setShowCalendar] = useState(false);
+  const [selectedAppointment, setSelectedAppointment] = useState(null);
+  const [alertMessage, setAlertMessage] = useState("");
 
   useEffect(() => {
     if (!authToken) {
@@ -38,6 +42,9 @@ export default function BarbershopView() {
 
         const barbersData = await bsService.getBarbers();
         setBarbers(Array.isArray(barbersData.data) ? barbersData.data : []);
+
+        const clientData = await userService.getClient(profile.id);
+        setClientId(clientData)
       } catch (error) {
         Logger.error(error.message);
         alert("ERROR cargando barbería... :-(");
@@ -52,19 +59,17 @@ export default function BarbershopView() {
 
   const handleDateSelection = async (date) => {
     setSelectedDate(date);
-  
+
     if (selectedBarber) {
-      console.log(selectedDate)
       try {
         const response = await bsService.getAvailableAppointments(selectedBarber, date.toLocaleDateString('en-CA').replace(/-/g, '/'));
-        console.log(response)
         setAvailableAppointments(Array.isArray(response) ? response : []);
       } catch (error) {
         Logger.error(error);
         alert("ERROR cargando citas disponibles... :-(");
       }
     }
-  };  
+  };
 
   const handleAddBarber = async (barberId) => {
     try {
@@ -88,6 +93,36 @@ export default function BarbershopView() {
       Logger.error(error.message);
       alert("ERROR eliminando barbero... :-(");
     }
+  };
+
+  const handleAppointmentSelection = (appointment) => {
+    setSelectedAppointment(appointment);
+    setAlertMessage("");
+  };
+
+  const handleReserveAppointment = async () => {
+    if (!selectedAppointment) {
+      setAlertMessage("Has de seleccionar una hora");
+      return;
+    }
+
+    try {
+      const appointmentData = {
+        barber_id: selectedBarber,
+        client_id: clientId,
+        date: selectedDate.toLocaleDateString('en-CA').replace(/\//g, '-'), // Reemplazar barras con guiones
+        hour: selectedAppointment,
+        state: 'programada',
+        notes: ''
+      };
+
+      const appointment = await bsService.doAppointment(appointmentData);
+      console.log(appointmentData)
+    } catch (error) {
+      Logger.error(error);
+      alert("ERROR reservando cita...")
+    }
+    alert(`Cita reservada para la hora: ${selectedAppointment}`);
   };
 
   return (
@@ -236,14 +271,22 @@ export default function BarbershopView() {
                       {availableAppointments.map((appointment, index) => (
                         <Button
                           key={index}
-                          variant="primary"
-                          className="mr-2 mb-2"
+                          variant={selectedAppointment === appointment ? "outline-success" : "outline-primary"}
+                          className="m-2"
                           onClick={() => handleAppointmentSelection(appointment)}
                         >
                           {appointment}
                         </Button>
                       ))}
                     </div>
+                    {alertMessage && <Alert variant="danger">{alertMessage}</Alert>}
+                    <Button 
+                      variant="success" 
+                      className="mt-3"
+                      onClick={handleReserveAppointment}
+                    >
+                      Reservar Cita
+                    </Button>
                   </div>
                 </div>
               )}

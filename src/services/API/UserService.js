@@ -145,6 +145,7 @@ export default class UserService {
 
 	async getClient(id) {
     try {
+			console.log(id)
 			const url = process.env.API_URL + `/userclient/${id}`;
 			const resp = await fetch(url, {
 					headers: {

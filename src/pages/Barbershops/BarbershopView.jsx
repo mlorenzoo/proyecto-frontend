@@ -260,7 +260,10 @@ export default function BarbershopView() {
                     selected={selectedDate}
                     onChange={date => handleDateSelection(date)}
                     dateFormat="dd/MM/yyyy"
+                    minDate={new Date()} // Evita la selección de días anteriores a hoy
+                    filterDate={date => date >= new Date()} // Filtra días anteriores
                   />
+
                 </div>
               )}
               {profile && profile.role === "Cliente" && availableAppointments.length > 0 && (

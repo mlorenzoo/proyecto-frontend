@@ -85,6 +85,7 @@ export function Header() {
                   {profile.role === "Barbero" && (
                     <>
                       <Nav.Link as={Link} to="/barbershops" eventKey={"/barbershops"}>BARBERÍAS</Nav.Link>
+                      <Nav.Link as={Link} to="/appointments" eventKey={"/appointments"}>CITAS</Nav.Link>
                       <Nav.Link as={Link} to="/profile">{profile.name}</Nav.Link>
                     </>
                   )}
@@ -93,6 +94,7 @@ export function Header() {
                     <>
                       <Nav.Link as={Link} to="/pricing" eventKey={"/PLANES"}>PLANES</Nav.Link>
                       <Nav.Link as={Link} to="/barbershops" eventKey={"/barbershops"}>BARBERÍAS</Nav.Link>
+                      <Nav.Link as={Link} to="/appointments" eventKey={"/appointments"}>CITAS</Nav.Link>
                       <Nav.Link as={Link} to="/profile">{profile.name}</Nav.Link>
                     </>
                   )}

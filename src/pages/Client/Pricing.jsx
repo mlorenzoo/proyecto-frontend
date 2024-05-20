@@ -75,7 +75,7 @@ const Pricing = () => {
         <div className="row justify-content-center">
           <div className="col-md-8 text-center">
             <h1 className="mt-5">Elige tu experiencia de CORTE-Z</h1>
-            <p>Cortes exclusivos, comodidad sin igual. Únete a la experiencia de suscripción</p>
+            <p className="desc">Cortes exclusivos, comodidad sin igual. Únete a la experiencia de suscripción</p>
           </div>
         </div>
         <div className="row justify-content-center">

@@ -34,7 +34,7 @@ export default function Profile() {
 
     return (
         <Layout>
-            <section id="profile" className="w-75 m-auto text-center">
+            <section id="profile" className="d-flex flex-column align-items-center justify-content-center w-100 vh-100 text-center">
                 <h1>Perfil</h1>
                 {profile ? 
                     <>
@@ -97,7 +97,7 @@ export default function Profile() {
                 }
                 {profile && (
                     <Link to={`/editar/${profile.id}`}>
-                        <Button className="mb-5" variant="light">Editar Perfil</Button>
+                        <Button className="custom-button-margin" variant="light">Editar Perfil</Button>
                     </Link>
                 )}
             </section>

@@ -9,7 +9,6 @@ import { Button, Table, Alert } from 'react-bootstrap';
 import UserContext from '../../contexts/UserContext';
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
-import { ArraySchema } from 'yup';
 
 export default function BarbershopView() {
   Logger.debug("BarbershopView page");
@@ -21,13 +20,15 @@ export default function BarbershopView() {
 
   const [barbershop, setBarbershop] = useState(null);
   const [barbers, setBarbers] = useState([]);
-  const [clientId, setClientId] = useState([]);
+  const [clientId, setClientId] = useState(null);
   const [selectedBarber, setSelectedBarber] = useState(null);
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [availableAppointments, setAvailableAppointments] = useState([]);
   const [showCalendar, setShowCalendar] = useState(false);
   const [selectedAppointment, setSelectedAppointment] = useState(null);
   const [alertMessage, setAlertMessage] = useState("");
+  const [isClientSubscribed, setIsClientSubscribed] = useState(false); // Estado para almacenar si el cliente está suscrito
+
 
   useEffect(() => {
     if (!authToken) {
@@ -44,7 +45,11 @@ export default function BarbershopView() {
         setBarbers(Array.isArray(barbersData.data) ? barbersData.data : []);
 
         const clientData = await userService.getClient(profile.id);
-        setClientId(clientData)
+        setClientId(clientData);
+
+        const clientSubscription = await bsService.checkClientSubscription(clientData);
+        setIsClientSubscribed(clientSubscription === 1); // Establecer isClientSubscribed solo si clientSubscription es 1
+
       } catch (error) {
         Logger.error(error.message);
         alert("ERROR cargando barbería... :-(");
@@ -252,8 +257,18 @@ export default function BarbershopView() {
                   </div>
                 </>
               )}
-              {profile && profile.role === "Cliente" && showCalendar && (
-                <div className="col-md-6">
+            {profile && profile.role === "Cliente" && !isClientSubscribed && (
+              <div className="col-md-6">
+                <Alert variant="info">
+                  Debes suscribirte para poder reservar citas. 
+                  <Button className="sus" variant="primary" onClick={() => navigate('/pricing')}>
+                    Suscribirse
+                  </Button>
+                </Alert>
+              </div>
+            )}
+            {profile && profile.role === "Cliente" && isClientSubscribed === true && showCalendar && (
+                <div className="col-md-6 calendar-container">
                   <h3>Calendario</h3>
                   <p>Selecciona una fecha:</p>
                   <DatePicker
@@ -263,10 +278,9 @@ export default function BarbershopView() {
                     minDate={new Date()} // Evita la selección de días anteriores a hoy
                     filterDate={date => date >= new Date()} // Filtra días anteriores
                   />
-
                 </div>
               )}
-              {profile && profile.role === "Cliente" && availableAppointments.length > 0 && (
+            {profile && profile.role === "Cliente" && isClientSubscribed === true && availableAppointments.length > 0 && (
                 <div className="row mt-4">
                   <div className="col-md-12">
                     <h3>Citas disponibles</h3>
@@ -275,7 +289,7 @@ export default function BarbershopView() {
                         <Button
                           key={index}
                           variant={selectedAppointment === appointment ? "outline-success" : "outline-primary"}
-                          className="m-2"
+                          className={`m-2 horas ${selectedAppointment === appointment ? "selected" : ""}`}
                           onClick={() => handleAppointmentSelection(appointment)}
                         >
                           {appointment}
@@ -293,7 +307,7 @@ export default function BarbershopView() {
                   </div>
                 </div>
               )}
-              <div>
+              <div className="col-md-12 map-container">
                 <h3>Dirección</h3>
                 <p>{barbershop.ubication}</p>
                 <MapContainer center={[barbershop.lat, barbershop.lon]} zoom={14} style={{ height: "400px", width: "100%" }}>

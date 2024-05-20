@@ -23,7 +23,6 @@ export default function UserView() {
 				const userData = await userService.getOne(authToken)
 				setProfile(userData.user)
 				
-				// Redirigir si el usuario no es Admin y el perfil no es Barbero
 				if (profile.role !== 'Admin' && !(profile.role === 'Gestor' && data.role === 'Barbero')) {
 					navigate('/unauthorized')
 				}

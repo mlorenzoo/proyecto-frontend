@@ -13,13 +13,14 @@ const AppointmentsSwitch = () => {
 
     return (
         <Layout>
-            <div className="d-flex justify-content-center align-items-center mt-5">
+            <div className="d-flex justify-content-center align-items-center mt-5 switch">
                 <ToggleButtonGroup type="radio" name="options" value={selectedOption}>
                     <ToggleButton 
                         id="tbg-radio-1" 
                         value={1} 
                         onChange={() => handleOptionChange(1)}
                         variant="light"
+                        className='switch'
                     >
                         Próximas reservas
                     </ToggleButton>
@@ -28,6 +29,7 @@ const AppointmentsSwitch = () => {
                         value={2} 
                         onChange={() => handleOptionChange(2)}
                         variant="light"
+                        className='switch'
                     >
                         Reservas pasadas
                     </ToggleButton>

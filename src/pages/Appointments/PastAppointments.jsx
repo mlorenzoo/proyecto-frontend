@@ -10,8 +10,10 @@ export const PastAppointments = () => {
   const [success, setSuccess] = useState(null);
 
   useEffect(() => {
-    if (!authToken) return;
-
+    if (!authToken) {
+      navigate('/unauthorized');
+      return;
+    }
     const fetchData = async () => {
       try {
         const clientData = await userService.getClient(profile.id);
@@ -32,7 +34,7 @@ export const PastAppointments = () => {
   }, [authToken, profile.id, userService, bsService]);
 
   useEffect(() => {
-    if (profile.role === 'Barbero') {
+    if (profile.role === 'Barbero' && profile.role === 'Cliente' && profile.role=== 'Admin') {
       fetchBarberAppointments();
     }
   }, [profile.role]);
@@ -64,7 +66,7 @@ export const PastAppointments = () => {
   };
 
   return (
-    <Container className='mt-5 d-flex justify-content-center'>
+    <Container className='mt-5 d-flex justify-content-center' id="past">
       <div>
         <h2>Reservas pasadas</h2>
         {success === false && (
@@ -90,7 +92,7 @@ export const PastAppointments = () => {
               <tbody>
                 {appointments.map((appointment, index) => (
                   <tr key={appointment.id}>
-                    <td>{index + 1}</td>
+                    <td className='id'>{index + 1}</td>
                     <td>{formatDate(appointment.date)}</td>
                     <td>{appointment.hour}</td>
                     <td>{formatState(appointment.state)}</td>

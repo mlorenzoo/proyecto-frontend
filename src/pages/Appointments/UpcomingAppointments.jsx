@@ -49,6 +49,12 @@ export const UpcomingAppointments = () => {
     })();
   }, [authToken, profile.id, profile.role, userService, bsService, navigate, barberId]);
 
+    useEffect(() => {
+    if (profile.role === 'Barbero' && profile.role === 'Cliente' && profile.role=== 'Admin') {
+      fetchBarberAppointments();
+    }
+  }, [profile.role]);
+
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     const formattedDate = new Intl.DateTimeFormat('es-ES', { weekday: 'long', day: '2-digit', month: '2-digit', year: 'numeric' }).format(date);
@@ -68,7 +74,7 @@ export const UpcomingAppointments = () => {
   };
 
   return (
-    <div className="d-flex flex-column align-items-center mt-5">
+    <div className="d-flex flex-column align-items-center mt-5" id='upcoming'>
       <h2>Reservas programadas</h2>
       {success === false && (
         <Alert variant="info" className="w-75 mt-3">
@@ -93,7 +99,7 @@ export const UpcomingAppointments = () => {
             <tbody>
               {appointments.filter(appointment => appointment.state === 'programada').map((appointment, index) => (
                 <tr key={appointment.id}>
-                  <td>{index + 1}</td>
+                  <td  className='id'>{index + 1}</td>
                   <td>{formatDate(appointment.date)}</td>
                   <td>{appointment.hour}</td>
                   <td>

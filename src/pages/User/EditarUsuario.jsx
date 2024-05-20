@@ -107,7 +107,7 @@ export default function EditarUsuario() {
 
   	return (
 		<Layout>
-			<section id="login" className="w-75 m-auto">
+			<section id="edit" className="w-75 m-auto">
 			<h2 className='mt-5'>Editar usuario "{profile.name}"</h2>
 			<Formik
 				validationSchema={schema}

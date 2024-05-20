@@ -90,7 +90,7 @@ body {
   h1 {
     text-align: center;
     margin-bottom: 100px;
-    margin-top: 100px;
+    margin-top: 40px;
     font-size: 36px;
     font-weight: bold;
   }
@@ -115,13 +115,25 @@ body {
   font-family: 'Inter', sans-serif;
 
   h1{
-    margin-bottom: 50px;
-    margin-top: 100px;
+    margin-bottom: 40px;
+    margin-top: 30px;
     font-size: 36px;
     font-weight: bold;
   }
   h2{
+    font-size: 24px;
     font-weight: bold;
+    display: flex;
+    justify-content: center;
+  }
+  p{
+    font-size: 18px;
+    display: flex;
+    justify-content: center;
+  }
+
+  .custom-button-margin {
+    margin-top: 20px;
   }
 }
 
@@ -140,7 +152,7 @@ body {
   height: 100%;
 }
 
-.users{
+#users{
   font-family: 'Inter', sans-serif;
   h2{
     text-align: center;
@@ -159,12 +171,96 @@ body {
   .buscador{
     text-align: center;
     margin-left: 30%;
+    margin-bottom: 50px;
   }
 
   p{
     text-align: center;
     margin-right: 29%;
     font-size: 18px;
+  }
+
+  th{
+    font-size: 24px;
+  }
+
+  .id{
+    font-weight: bold;
+  }
+
+  td{
+    font-size: 18px;
+    font-weight: normal;
+  }
+}
+
+#user{
+  font-family: 'Inter', sans-serif;
+  h2{
+    text-align: center;
+    margin-bottom: 3%;
+    margin-top: 2%;
+    font-size: 36px;
+    font-weight: bold;
+  }
+  h3{
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+  }
+  p{
+    text-align: center;
+    font-size: 18px;
+    margin-bottom: 3%;
+  }
+}
+
+#edit{
+  font-family: 'Inter', sans-serif;
+
+  h2 {
+    text-align: center;
+    margin-bottom: 50px;
+    margin-top: 35px;
+    font-size: 36px;
+    font-weight: bold;
+  }
+  form {
+    font-weight: bold;
+    font-size: 18px;
+
+    .check {
+      font-size: 18px;
+      font-weight: normal;
+    }
+
+    button {
+      font-weight: bold;
+      font-size: 18px;
+    }
+  }
+}
+
+#pricing{
+  font-family: 'Inter', sans-serif;
+  h1 {
+    text-align: center;
+    margin-bottom: 30px;
+    margin-top: 35px;
+    font-size: 36px;
+    font-weight: bold;
+  }
+  p{
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+  }
+  div{
+    text-align: center;
+    font-size: 18px;
+  }
+  .desc{
+    margin-bottom: 15%;
   }
 }
 
@@ -202,8 +298,8 @@ body {
   font-family: 'Inter', sans-serif;
   h2{
     text-align: center;
-    margin-bottom: 3%;
-    margin-top: 4%;
+    margin-bottom: 2.5%;
+    margin-top: 2%;
     font-size: 36px;
     font-weight: bold;
   }
@@ -221,7 +317,6 @@ body {
   label{
     margin-top: 1%;
   }
-
 }
 
 #subscriptions{
@@ -229,8 +324,8 @@ body {
 
   h1 {
     text-align: center;
-    margin-bottom: 80px;
-    margin-top: 40px;
+    margin-bottom: 40px;
+    margin-top: 35px;
     font-size: 36px;
     font-weight: bold;
   }
@@ -245,7 +340,7 @@ body {
   p{
     text-align: center;
     font-size: 18px;
-    margin-bottom: 100px;
+    margin-bottom: 50px;
   }
   button{
     font-size: 18px;
@@ -254,5 +349,208 @@ body {
   }
   .plan{
     margin-top: 11%;
+  }
+  .id{
+    font-weight: bold;
+  }
+}
+
+#nuevo-plan{
+  font-family: 'Inter', sans-serif;
+  h2{
+    text-align: center;
+    margin-bottom: 3%;
+    margin-top: 3%;
+    font-size: 36px;
+    font-weight: bold;
+  }
+  button{
+    font-size: 18px;
+    margin-top: 20px;
+    font-weight: bold;
+  }
+
+  form {
+    font-weight: bold;
+    font-size: 18px;
+  }
+
+  label{
+    margin-top: 1%;
+  }
+}
+
+#nueva-barberia{
+  font-family: 'Inter', sans-serif;
+  h2{
+    text-align: center;
+    margin-bottom: 3%;
+    margin-top: 3%;
+    font-size: 36px;
+    font-weight: bold;
+  }
+  button{
+    font-size: 18px;
+    margin-top: 20px;
+    font-weight: bold;
+  }
+
+  form {
+    font-weight: bold;
+    font-size: 18px;
+  }
+
+  label{
+    margin-top: 1%;
+  }
+}
+
+#barbershop{
+  font-family: 'Inter', sans-serif;
+  h2{
+    text-align: center;
+    margin-bottom: 3%;
+    margin-top: 3%;
+    font-size: 36px;
+    font-weight: bold;
+  }
+  h3{
+    font-size: 24px;
+    font-weight: bold;
+  }
+  p{
+    font-size: 18px;
+  }
+  button{
+    font-size: 18px;
+    margin-bottom: 25px;
+  }
+  .horas {
+    background-color: transparent;
+    color: #fff;
+    border: 2px solid #fff;
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+
+    &:hover {
+      background-color: #fff;
+      color: #000;
+    }
+  }
+  .horas.selected {
+    background-color: #fff;
+    color: #000;
+  }  
+  .sus{
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+    margin-left: 2%;
+    margin-top: 3%;
+  }
+  .calendar-container {
+    position: relative;
+    z-index: 2; // Asegúrate de que el calendario esté en la parte superior
+  }
+  
+  .map-container {
+    position: relative;
+    z-index: 1; // Asegúrate de que el mapa esté debajo del calendario
+  }
+}
+
+#unau {
+  font-family: 'Inter', sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  h1 {
+    text-align: center;
+    margin-bottom: 3%;
+    font-size: 36px;
+    font-weight: bold;
+  }
+
+  p {
+    text-align: center;
+    font-size: 18px;
+    margin-bottom: 50px;
+  }
+
+  button {
+    font-size: 18px;
+    font-weight: bold;
+  }
+}
+
+.switch{
+  font-family: 'Inter', sans-serif;
+  font-size: 18px;
+}
+
+#upcoming{
+  font-family: 'Inter', sans-serif;
+  h2{
+    text-align: center;
+    margin-bottom: 2%;
+    font-size: 36px;
+    font-weight: bold;
+  }
+  th{
+    font-size: 24px;
+  }
+
+  .id{
+    font-weight: bold;
+  }
+
+  td{
+    font-size: 18px;
+    font-weight: normal;
+  }
+}
+
+#past {
+  font-family: 'Inter', sans-serif;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin-top: 5%;
+  margin-bottom: 5%;
+
+  .w-75 {
+    width: 75%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  h2 {
+    margin-bottom: 2%;
+    font-size: 36px;
+    font-weight: bold;
+  }
+
+  th {
+    font-size: 24px;
+  }
+
+  .id {
+    font-weight: bold;
+  }
+
+  td {
+    font-size: 18px;
+    font-weight: normal;
+    padding: 25px 100px; // Ajusta el espaciado interior de las celdas
+  }
+
+  tr {
+    margin-bottom: 10px; // Ajusta el espaciado entre filas
   }
 }

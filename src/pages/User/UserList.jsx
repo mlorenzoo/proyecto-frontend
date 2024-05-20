@@ -130,7 +130,7 @@ export default function UserList() {
 							<tbody>
 								{users.map((user) => (
 									<tr key={user.id}>
-										<td>{user.id}</td>
+										<td className='id'>{user.id}</td>
 										<td>
 											<Link to={`/users/${user.id}`}>{user.name} {user.surname}</Link>
 										</td>

@@ -39,7 +39,7 @@ const ListSubscriptions = () => {
   };
 
   const handleShowModal = (subscription) => {
-    setSubscriptionToDelete(subscription.id); // Guarda la ID del plan a eliminar
+    setSubscriptionToDelete(subscription.id);
     setShowModal(true);
   };
 
@@ -93,7 +93,7 @@ const ListSubscriptions = () => {
             <tbody>
               {subscriptions.map(subscription => (
                 <tr key={subscription.id}>
-                  <td>{subscription.id}</td>
+                  <td className="id">{subscription.id}</td>
                   <td>{subscription.plan}</td>
                   <td>{`€${subscription.price}`}</td>
                   <td>{subscription.duration}</td>
